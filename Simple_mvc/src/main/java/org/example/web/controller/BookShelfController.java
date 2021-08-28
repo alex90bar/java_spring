@@ -2,6 +2,7 @@ package org.example.web.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,6 +135,7 @@ public class BookShelfController {
 
   @PostMapping("/uploadFile")
   public String uploadFile(@RequestParam("file")MultipartFile file) throws Exception {
+
     String name = file.getOriginalFilename();
     byte[] bytes = file.getBytes();
 
@@ -152,6 +155,12 @@ public class BookShelfController {
     logger.info("new file saved at: " + serverFile.getAbsolutePath());
 
     return "redirect:/books/shelf";
+  }
+
+  @ExceptionHandler(FileNotFoundException.class)
+  public String handleError(Model model, FileNotFoundException exception){
+    model.addAttribute("errorMessage", "Filename is empty! Choose file. " + exception.getMessage());
+    return "errors/500";
   }
 
 
