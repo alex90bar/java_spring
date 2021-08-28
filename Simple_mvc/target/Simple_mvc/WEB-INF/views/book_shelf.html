@@ -116,7 +116,7 @@
           <input type="text" placeholder="author" th:name="authorToSort">
         </td>
         <td>
-          <input type="submit" value="sort by author">
+          <input type="submit" value="filter by author">
         </td>
       </tr>
     </table>
@@ -129,7 +129,7 @@
           <input type="text" placeholder="title" th:name="titleToSort">
         </td>
         <td>
-          <input type="submit" value="sort by title">
+          <input type="submit" value="filter by title">
         </td>
       </tr>
     </table>
@@ -142,12 +142,24 @@
           <input type="text" placeholder="size" th:name="sizeToSort">
         </td>
         <td>
-          <input type="submit" value="sort by size">
+          <input type="submit" value="filter by size">
         </td>
       </tr>
     </table>
   </form>
 
+  <form method="post" th:action="@{/books/uploadFile}" enctype="multipart/form-data">
+    <table>
+      <tr>
+        <td>
+          <input type="file" name="file"/>
+        </td>
+        <td>
+          <input type="submit" value="Upload">
+        </td>
+      </tr>
+    </table>
+  </form>
 
   <table id="books">
     <tr>

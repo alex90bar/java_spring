@@ -24,7 +24,7 @@ public class LoginRepository implements ProjectRepository<LoginForm> {
   }
 
   @Override
-  public boolean removeItemById(String userIdToRemove) {
+  public boolean removeItemById(Integer userIdToRemove) {
     return false;
   }
 
