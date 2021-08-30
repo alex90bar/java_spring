@@ -44,14 +44,14 @@ public class BookService {
     return bookRepo.removeItemBySize(sizeToRemove);
   }
 
-  public List<Book> sortByAuthor(String authorToSort) {
-    ArrayList<Book> sorted = new ArrayList<>();
+  public List<Book> filterByAuthor(String authorToFilter) {
+    ArrayList<Book> filtered = new ArrayList<>();
     for (Book book : getAllBooks()) {
-      if (book.getAuthor().equals(authorToSort)) {
-        sorted.add(book);
+      if (book.getAuthor().equals(authorToFilter)) {
+        filtered.add(book);
       }
     }
-    return sorted;
+    return filtered;
   }
 
   public List<Book> sortByTitle(String titleToSort) {

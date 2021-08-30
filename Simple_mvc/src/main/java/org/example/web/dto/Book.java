@@ -1,7 +1,10 @@
 package org.example.web.dto;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class Book {
 
@@ -10,6 +13,8 @@ public class Book {
   private String author;
   @NotBlank
   private String title;
+  @NotNull
+  @Min(1)
   @Digits(integer = 4, fraction = 0)
   private Integer size;
 

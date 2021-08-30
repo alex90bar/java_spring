@@ -64,40 +64,28 @@ public class BookRepository implements ProjectRepository<Book>, ApplicationConte
   }
 
 
-  public boolean removeItemByAuthor(String authorToRemove) {
-    boolean removedSuccess = false;
-    for (Book book: retreiveAll()){
-      if (book.getAuthor().equals(authorToRemove)){
-        logger.info("remove book completed: " + book);
-       // repo.remove(book);
-        removedSuccess = true;
-      }
-    }
-    return removedSuccess;
+  public boolean removeItemByAuthor(String bookAuthorToRemove) {
+    MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+    parameterSource.addValue("author", bookAuthorToRemove);
+    jdbcTemplate.update("DELETE FROM books WHERE author = :author", parameterSource);
+    logger.info("remove book completed");
+    return true;
   }
 
-  public boolean removeItemByTitle(String titleToRemove) {
-    boolean removedSuccess = false;
-    for (Book book: retreiveAll()){
-      if (book.getTitle().equals(titleToRemove)){
-        logger.info("remove book completed: " + book);
-       // repo.remove(book);
-        removedSuccess = true;
-      }
-    }
-    return removedSuccess;
+  public boolean removeItemByTitle(String bookTitleToRemove) {
+    MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+    parameterSource.addValue("title", bookTitleToRemove);
+    jdbcTemplate.update("DELETE FROM books WHERE title = :title", parameterSource);
+    logger.info("remove book completed");
+    return true;
   }
 
-  public boolean removeItemBySize(Integer sizeToRemove) {
-    boolean removedSuccess = false;
-    for (Book book: retreiveAll()){
-      if (book.getSize().equals(sizeToRemove)){
-        logger.info("remove book completed: " + book);
-       // repo.remove(book);
-        removedSuccess = true;
-      }
-    }
-    return removedSuccess;
+  public boolean removeItemBySize(Integer bookSizeToRemove) {
+    MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+    parameterSource.addValue("size", bookSizeToRemove);
+    jdbcTemplate.update("DELETE FROM books WHERE size = :size", parameterSource);
+    logger.info("remove book completed");
+    return true;
   }
 
   @Override
