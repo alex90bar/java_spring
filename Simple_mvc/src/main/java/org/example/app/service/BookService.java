@@ -54,20 +54,20 @@ public class BookService {
     return filtered;
   }
 
-  public List<Book> sortByTitle(String titleToSort) {
+  public List<Book> filterByTitle(String titleToFilter) {
     ArrayList<Book> sorted = new ArrayList<>();
     for (Book book : getAllBooks()) {
-      if (book.getTitle().equals(titleToSort)) {
+      if (book.getTitle().equals(titleToFilter)) {
         sorted.add(book);
       }
     }
     return sorted;
   }
 
-  public List<Book> sortBySize(Integer sizeToSort) {
+  public List<Book> filterBySize(Integer sizeToFilter) {
     ArrayList<Book> sorted = new ArrayList<>();
     for (Book book : getAllBooks()) {
-      if (book.getSize().equals(sizeToSort)) {
+      if (book.getSize().equals(sizeToFilter)) {
         sorted.add(book);
       }
     }

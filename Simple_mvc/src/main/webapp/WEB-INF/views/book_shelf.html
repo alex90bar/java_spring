@@ -134,27 +134,33 @@
     </table>
   </form>
 
-  <form method="post" th:action="@{/books/shelf/title}">
+  <form method="post" th:action="@{/books/shelf/title}" th:object="${bookTitleToFilter}">
     <table>
       <tr>
         <td>
-          <input type="text" placeholder="title" th:name="titleToSort">
+          <input type="text" placeholder="title" th:field="*{title}">
         </td>
         <td>
           <input type="submit" value="filter by title">
+        </td>
+        <td th:if="${#fields.hasErrors()}">
+          <p>Wrong title!</p>
         </td>
       </tr>
     </table>
   </form>
 
-  <form method="post" th:action="@{/books/shelf/size}">
+  <form method="post" th:action="@{/books/shelf/size}" th:object="${bookSizeToFilter}">
     <table>
       <tr>
         <td>
-          <input type="text" placeholder="size" th:name="sizeToSort">
+          <input type="text" placeholder="size" th:field="*{size}">
         </td>
         <td>
           <input type="submit" value="filter by size">
+        </td>
+        <td th:if="${#fields.hasErrors()}">
+          <p>Wrong size!</p>
         </td>
       </tr>
     </table>

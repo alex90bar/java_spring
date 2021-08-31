@@ -8,9 +8,12 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.example.app.service.BookService;
 import org.example.web.dto.Book;
+import org.example.web.dto.BookAuthorToFilter;
 import org.example.web.dto.BookAuthorToRemove;
 import org.example.web.dto.BookIdToRemove;
+import org.example.web.dto.BookSizeToFilter;
 import org.example.web.dto.BookSizeToRemove;
+import org.example.web.dto.BookTitleToFilter;
 import org.example.web.dto.BookTitleToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -45,13 +48,15 @@ public class BookShelfController {
     model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
     model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
     model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-    model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+    model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+    model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+    model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
     model.addAttribute("bookList", bookService.getAllBooks());
     return "book_shelf";
   }
 
   @PostMapping("/shelf/author")
-  public String sortByAuthor(@Valid BookAuthorToRemove bookAuthorToFilter, BindingResult bindingResult,
+  public String sortByAuthor(@Valid BookAuthorToFilter bookAuthorToFilter, BindingResult bindingResult,
       Model model) {
     if (bindingResult.hasErrors()) {
       model.addAttribute("book", new Book());
@@ -60,6 +65,8 @@ public class BookShelfController {
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
       model.addAttribute("bookAuthorToFilter", bookAuthorToFilter);
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -69,28 +76,70 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.filterByAuthor(bookAuthorToFilter.getAuthor()));
       return "book_shelf";
     }
   }
 
   @PostMapping("/shelf/title")
-  public String sortByTitle(
-      @RequestParam(value = "titleToSort", required = false) String titleToSort, Model model) {
-    logger.info("sort by title: " + titleToSort);
-    model.addAttribute("book", new Book());
-    model.addAttribute("bookList", bookService.sortByTitle(titleToSort));
-    return "book_shelf";
+  public String sortByTitle(@Valid BookTitleToFilter bookTitleToFilter, BindingResult bindingResult,
+          Model model) {
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("book", new Book());
+      model.addAttribute("bookIdToRemove", new BookIdToRemove());
+      model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
+      model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
+      model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", bookTitleToFilter);
+      model.addAttribute("bookList", bookService.getAllBooks());
+      return "book_shelf";
+    } else {
+      logger.info("filter by size: " + bookTitleToFilter);
+      model.addAttribute("book", new Book());
+      model.addAttribute("bookIdToRemove", new BookIdToRemove());
+      model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
+      model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
+      model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("bookList", bookService.filterByTitle(bookTitleToFilter.getTitle()));
+      return "book_shelf";
+    }
   }
 
   @PostMapping("/shelf/size")
-  public String sortBySize(@RequestParam(value = "sizeToSort", required = false) Integer sizeToSort,
+  public String sortBySize(@Valid BookSizeToFilter bookSizeToFilter, BindingResult bindingResult,
       Model model) {
-    logger.info("sort by size: " + sizeToSort);
-    model.addAttribute("book", new Book());
-    model.addAttribute("bookList", bookService.sortBySize(sizeToSort));
-    return "book_shelf";
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("book", new Book());
+      model.addAttribute("bookIdToRemove", new BookIdToRemove());
+      model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
+      model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
+      model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", bookSizeToFilter);
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("bookList", bookService.getAllBooks());
+      return "book_shelf";
+    } else {
+      logger.info("filter by size: " + bookSizeToFilter);
+      model.addAttribute("book", new Book());
+      model.addAttribute("bookIdToRemove", new BookIdToRemove());
+      model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
+      model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
+      model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("bookList", bookService.filterBySize(bookSizeToFilter.getSize()));
+      return "book_shelf";
+    }
   }
 
   @PostMapping("/save")
@@ -101,7 +150,9 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -122,7 +173,9 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -143,7 +196,9 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", bookAuthorToRemove);
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -164,7 +219,9 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
       model.addAttribute("bookTitleToRemove", bookTitleToRemove);
       model.addAttribute("bookSizeToRemove", new BookSizeToRemove());
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -185,7 +242,9 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToRemove", new BookAuthorToRemove());
       model.addAttribute("bookTitleToRemove", new BookTitleToRemove());
       model.addAttribute("bookSizeToRemove", bookSizeToRemove);
-      model.addAttribute("bookAuthorToFilter", new BookAuthorToRemove());
+      model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
+      model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
+      model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
