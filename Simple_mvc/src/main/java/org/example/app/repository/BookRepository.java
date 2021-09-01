@@ -1,5 +1,6 @@
 package org.example.app.repository;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,21 @@ public class BookRepository implements ProjectRepository<Book>, ApplicationConte
     return true;
   }
 
+  @Override
+  public List<String> getAllFiles() {
+    ArrayList<String> listFiles = new ArrayList<>();
+
+    String rootPath = System.getProperty("catalina.home");
+    File dir = new File(rootPath + File.separator + "external_uploads");
+
+    File[] files = dir.listFiles();
+
+    for (File file : files){
+      listFiles.add(file.getName());
+    }
+    return listFiles;
+  }
+
   public boolean removeItemBySize(Integer bookSizeToRemove) {
     MapSqlParameterSource parameterSource = new MapSqlParameterSource();
     parameterSource.addValue("size", bookSizeToRemove);
@@ -87,6 +103,8 @@ public class BookRepository implements ProjectRepository<Book>, ApplicationConte
     logger.info("remove book completed");
     return true;
   }
+
+
 
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

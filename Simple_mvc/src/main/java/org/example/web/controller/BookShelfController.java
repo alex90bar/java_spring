@@ -4,7 +4,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import org.apache.log4j.Logger;
 import org.example.app.service.BookService;
 import org.example.web.dto.Book;
@@ -52,6 +57,7 @@ public class BookShelfController {
     model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
     model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
     model.addAttribute("bookList", bookService.getAllBooks());
+    model.addAttribute("listFiles", bookService.getAllFiles());
     return "book_shelf";
   }
 
@@ -68,6 +74,7 @@ public class BookShelfController {
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
       model.addAttribute("bookList", bookService.getAllBooks());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       return "book_shelf";
     } else {
       logger.info("filter by author: " + bookAuthorToFilter);
@@ -79,6 +86,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.filterByAuthor(bookAuthorToFilter.getAuthor()));
       return "book_shelf";
     }
@@ -97,6 +105,7 @@ public class BookShelfController {
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", bookTitleToFilter);
       model.addAttribute("bookList", bookService.getAllBooks());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       return "book_shelf";
     } else {
       logger.info("filter by size: " + bookTitleToFilter);
@@ -108,6 +117,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.filterByTitle(bookTitleToFilter.getTitle()));
       return "book_shelf";
     }
@@ -125,6 +135,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", bookSizeToFilter);
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -137,6 +148,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.filterBySize(bookSizeToFilter.getSize()));
       return "book_shelf";
     }
@@ -153,6 +165,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -176,6 +189,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -199,6 +213,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -222,6 +237,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -245,6 +261,7 @@ public class BookShelfController {
       model.addAttribute("bookAuthorToFilter", new BookAuthorToFilter());
       model.addAttribute("bookSizeToFilter", new BookSizeToFilter());
       model.addAttribute("bookTitleToFilter", new BookTitleToFilter());
+      model.addAttribute("listFiles", bookService.getAllFiles());
       model.addAttribute("bookList", bookService.getAllBooks());
       return "book_shelf";
     } else {
@@ -276,6 +293,28 @@ public class BookShelfController {
     logger.info("new file saved at: " + serverFile.getAbsolutePath());
 
     return "redirect:/books/shelf";
+  }
+
+  @GetMapping("/downloadFile")
+  public void downloadFile(@Valid String file, HttpServletResponse response) throws Exception{
+
+      String rootPath = System.getProperty("catalina.home");
+      File dir = new File(rootPath + File.separator + "external_uploads");
+
+      Path fileToDownload = Paths.get(String.valueOf(dir), file);
+
+      if (Files.exists(fileToDownload)) {
+        response.setHeader("Content-disposition", "attachment;filename=" + file);
+        response.setContentType("application/octet-stream");
+        try {
+          Files.copy(fileToDownload, response.getOutputStream());
+          response.getOutputStream().flush();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+
   }
 
   @ExceptionHandler(FileNotFoundException.class)

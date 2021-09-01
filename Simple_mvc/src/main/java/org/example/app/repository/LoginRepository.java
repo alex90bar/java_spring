@@ -42,4 +42,9 @@ public class LoginRepository implements ProjectRepository<LoginForm> {
   public boolean removeItemByTitle(String titleToRemove) {
     return false;
   }
+
+  @Override
+  public List<String> getAllFiles() {
+    return null;
+  }
 }

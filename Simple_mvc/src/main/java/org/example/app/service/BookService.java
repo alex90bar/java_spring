@@ -81,4 +81,8 @@ public class BookService {
   private void defaultDestroy() {
     logger.info("default DESTROY in book service");
   }
+
+  public List<String> getAllFiles() {
+    return bookRepo.getAllFiles();
+  }
 }

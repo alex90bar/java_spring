@@ -15,4 +15,6 @@ public interface ProjectRepository<T> {
   boolean removeItemByAuthor(String authorToRemove);
 
   boolean removeItemByTitle(String titleToRemove);
+
+  List<String> getAllFiles();
 }
