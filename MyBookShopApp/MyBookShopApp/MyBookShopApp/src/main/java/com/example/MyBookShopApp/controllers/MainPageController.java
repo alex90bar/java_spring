@@ -24,4 +24,9 @@ public class MainPageController {
     return "index";
   }
 
+  @GetMapping("/genres")
+  public String genresPage(){
+    return "genres/index";
+  }
+
 }
