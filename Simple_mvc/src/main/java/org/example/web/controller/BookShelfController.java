@@ -286,9 +286,11 @@ public class BookShelfController {
 
     // create file
     File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
-    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-    stream.write(bytes);
-    stream.close();
+
+    try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile))) {
+      stream.write(bytes);
+    }
+//    stream.close();
 
     logger.info("new file saved at: " + serverFile.getAbsolutePath());
 

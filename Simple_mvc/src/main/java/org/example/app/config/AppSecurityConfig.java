@@ -40,13 +40,14 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         .csrf().disable()
         .authorizeRequests()
         .antMatchers("/login*").permitAll()
+        .antMatchers("/errors/*").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/login/auth")
         .defaultSuccessUrl("/books/shelf", true)
-        .failureUrl("/login");
+        .failureUrl("/errors/404");
   }
 
   @Override
