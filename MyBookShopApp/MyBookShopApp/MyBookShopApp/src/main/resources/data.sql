@@ -23,6 +23,10 @@ insert into authors (author_name) values ('Lindsay Coutthart');
 insert into authors (author_name) values ('Helyn Schneidar');
 insert into authors (author_name) values ('Bette-ann Askem');
 insert into authors (author_name) values ('Dom Robuchon');
+insert into authors (author_name) values ('Angel Robuch');
+insert into authors (author_name) values ('Albert Beerman');
+insert into authors (author_name) values ('Boris Bigman');
+insert into authors (author_name) values ('Bill Ball');
 
 insert into books (author_id, title, priceOld, price) values (1, 'exploit real-time e-commerce', '$203.23', '$43.37');
 insert into books (author_id, title, priceOld, price) values (2, 'utilize real-time interfaces', '$260.31', '$35.96');

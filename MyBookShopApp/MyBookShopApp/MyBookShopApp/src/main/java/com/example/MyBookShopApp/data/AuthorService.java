@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class AuthorService {
               return author;
             });
     authors.sort(Comparator.comparing(Author::getAuthorName));
+
     return new ArrayList<>(authors);
 
   }
