@@ -3,8 +3,10 @@ package com.example.MyBookShopApp.controller;
 import com.example.MyBookShopApp.data.Author;
 import com.example.MyBookShopApp.data.AuthorService;
 import com.example.MyBookShopApp.data.BookService;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ public class MainPageController {
   public String mainPage(Model model){
     model.addAttribute("bookData", bookService.getBooksData());
     model.addAttribute("searchPlaceholder", "new search placeholder");
+    // model.addAttribute("serverTime", new SimpleDateFormat("hh:mm:ss").format(new Date()));
+    model.addAttribute("serverTime", new Date());
+    model.addAttribute("placeholderTextPart2", "SERVER");
+    model.addAttribute("messageTemplate", "searchbar.placeholder2");
     return "index";
   }
 

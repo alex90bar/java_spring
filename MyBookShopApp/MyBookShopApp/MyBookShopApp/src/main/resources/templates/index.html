@@ -29,6 +29,17 @@
   <link rel="stylesheet" href="/assets/css/extra.min.css?v=64223515"><!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script defer src="/assets/js/scripts.min.js?v=64223515"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#locales").change(function() {
+        var selectedOption = $('#locales').val();
+        if (selectedOption != '') {
+          window.location.replace('?lang=' + selectedOption)
+        }
+      });
+    });
+  </script>
 </head>
 <body class="Site">
   <!--if lt IE 8
@@ -44,7 +55,10 @@
     <div class="Header-rowMain">
       <div class="wrap">
         <div class="row">
-          <div class="row-block Header-logo"><a class="logo" href="/"><img class="logo-image" src="/assets/img/logo.png" alt="logo.png"/><span class="logo-text">BOOKSHOP</span></a>
+          <div class="row-block Header-logo"><a class="logo" href="/"><img class="logo-image"
+                                                                           src="/assets/img/logo.png"
+                                                                           alt="logo.png"/><span
+              class="logo-text" th:text="${#strings.toUpperCase('bookshop ')} + ${#locale.getDisplayLanguage()}">BOOKSHOP</span></a>
           </div>
           <div class="Header-searchWrap row-block">
             <div class="Header-searchLink"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19"><g><g><path fill="#b8b8b8" d="M17.812 17.852c.25.268.25.69 0 .948a.622.622 0 0 1-.457.2.64.64 0 0 1-.457-.2l-5.364-5.494a7.07 7.07 0 0 1-4.32 1.47C3.232 14.777 0 11.457 0 7.389 0 3.321 3.232 0 7.214 0c3.983 0 7.214 3.32 7.214 7.388 0 1.94-.74 3.7-1.926 5.015zM7.214 13.44c3.264 0 5.909-2.708 5.909-6.05 0-3.344-2.655-6.052-5.909-6.052-3.264 0-5.908 2.72-5.908 6.051 0 3.332 2.644 6.051 5.908 6.051z"/></g></g></svg>
@@ -53,8 +67,9 @@
               <div class="search">
                 <form class="form form_search" action="#" method="post" data-searchlimit="20">
                   <input class="search-input" id="query" name="query" type="text"
-                         th:placeholder="${searchPlaceholder}"
+                         th:placeholder="#{${messageTemplate}(${#dates.format(serverTime, 'hh:mm')}, #{searchbar.placeholderTextPart1}, ${placeholderTextPart2})}"
                          placeholder="Search over 30 million book titles" value=""/>
+                  <!--                         th:placeholder="${searchPlaceholder}"-->
 <!--                  Добавляем кастомный placeholder-->
                   <button class="search-button" type="submit" name="search" id="search">Поиск
                   </button>
@@ -80,15 +95,16 @@
       <div class="wrap">
         <nav class="menuModal" id="navigate">
           <ul class="menu menu_main">
-            <li class="menu-item menu-item_ACTIVE"><a class="menu-link" href="/bookshop/main">Главная</a>
+            <li class="menu-item menu-item_ACTIVE"><a class="menu-link" href="/bookshop/main"
+                                                      th:text="${#messages.msg('topbar.main')}">Главная</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/bookshop/genres">Жанры</a>
+            <li class="menu-item"><a class="menu-link" href="/bookshop/genres" th:text="#{topbar.genres}">Жанры</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/books/recent.html">Новинки</a>
+            <li class="menu-item"><a class="menu-link" href="/books/recent.html" th:text="#{topbar.news}">Новинки</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/books/popular.html">Популярное</a>
+            <li class="menu-item"><a class="menu-link" href="/books/popular.html" th:text="#{topbar.popular}">Популярное</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/bookshop/authors">Авторы</a>
+            <li class="menu-item"><a class="menu-link" href="/bookshop/authors" th:text="#{topbar.authors}">Авторы</a>
             </li>
           </ul>
         </nav>
@@ -110,9 +126,9 @@
                 <div class="Slider-content">
                   <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
                     <div class="Card-content">
-                      <strong class="Card-title"><a href="/books/slug.html" th:text="${book.title}">Техника</a>
+                      <strong class="Card-title"><a href="/books/slug.html" th:text="${#strings.toUpperCase(book.title)}">Техника</a>
                       </strong>
-                      <div class="Card-description" th:text="${book.author}">Кондратенко Валерий Петрович
+                      <div class="Card-description" th:text="${book.author.toUpperCase()}">Кондратенко Валерий Петрович
                       </div>
                       <div class="Card-cost"><span class="Card-priceOld" th:text="${book.priceOld}">₽300.00</span><span class="Card-price" th:text="${book.price}">₽190.00</span>
                       </div>
@@ -120,106 +136,7 @@
                   </div>
                 </div>
               </div>
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/>-->
-<!--                      <div class="Card-sale">30% скидка-->
-<!--                      </div></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Английский язык. 5 класс. Английский в фокусе. Рабочая тетрадь. ФГОС</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Ваулина, Дули, Подоляко-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-priceOld">₽250.00</span><span class="Card-price">₽210.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Английский язык. 4 класс. Английский в фокусе. Рабочая тетрадь</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Быкова, Дули, Эванс-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽190.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Великая Отечественная война. 1941-1945</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Солопенко Алла, Меркулов Дмитрий-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽50.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Большое путешествие по телу человека</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Джон Фарндон-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽900.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Английский язык. 4 класс. Английский в фокусе. Рабочая тетрадь</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Быкова, Дули, Эванс-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽190.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Великая Отечественная война. 1941-1945</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Солопенко Алла, Меркулов Дмитрий-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽50.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="Slider-item">-->
-<!--                <div class="Slider-content">-->
-<!--                  <div class="Card"><a class="Card-picture" href="/books/slug.html"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>-->
-<!--                    <div class="Card-content">-->
-<!--                      <strong class="Card-title"><a href="/books/slug.html">Большое путешествие по телу человека</a>-->
-<!--                      </strong>-->
-<!--                      <div class="Card-description">Джон Фарндон-->
-<!--                      </div>-->
-<!--                      <div class="Card-cost"><span class="Card-price">₽900.00</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
+
             </div>
             <div class="Slider-navigateWrap">
               <div class="Slider-navigate">
@@ -242,11 +159,12 @@
                       <div class="Card-sale">30% скидка
                       </div></a>
                     <div class="Card-content">
-                      <strong class="Card-title"><a href="/books/slug.html">Техника</a>
+                      <strong class="Card-title"><a href="/books/slug.html" th:text="${bookData[1]['title']}">Техника</a>
                       </strong>
-                      <div class="Card-description">Кондратенко Александр Петрович
+                      <div class="Card-description" th:text="${bookData[1]['author']}">Кондратенко Александр Петрович
                       </div>
-                      <div class="Card-cost"><span class="Card-priceOld">₽500.00</span><span class="Card-price">₽390.00</span>
+                      <div class="Card-cost"><span class="Card-priceOld" th:text="${bookData[1]['priceOld']}">₽500.00</span>
+                        <span class="Card-price" th:text="${bookData[1].price}">₽390.00</span>
                       </div>
                     </div>
                   </div>
@@ -660,6 +578,14 @@
             <li class="menu-item"><a class="menu-link" href="/faq.html">Помощь</a>
             </li>
             <li class="menu-item"><a class="menu-link" href="/contacts.html">Контакты</a>
+            </li>
+            <li class="menu-item">
+              <span>Выбор языка</span>
+              <select id="locales">
+                <option value=""></option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+              </select>
             </li>
           </ul>
         </div>
