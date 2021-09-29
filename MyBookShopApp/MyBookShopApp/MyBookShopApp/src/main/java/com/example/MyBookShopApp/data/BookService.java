@@ -24,7 +24,7 @@ public class BookService {
 // ResultSet с результатами запроса и номер текущей строки на вход передаются
               Book book = new Book();
               book.setId(rs.getInt("id"));
-              book.setAuthor(rs.getString("author_name"));
+              book.setAuthor(rs.getString("last_name") + " " + rs.getString("first_name"));
               book.setTitle(rs.getString("title"));
               book.setPriceOld(rs.getString("priceOld"));
               book.setPrice(rs.getString("price"));

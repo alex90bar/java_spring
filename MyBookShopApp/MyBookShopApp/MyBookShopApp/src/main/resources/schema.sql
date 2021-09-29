@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS authors;
 
-CREATE TABLE authors
-(
-    id   INT AUTO_INCREMENT PRIMARY KEY,
-    author_name VARCHAR(250) NOT NULL
+create table authors (
+                         id INT,
+                         first_name VARCHAR(50),
+                         last_name VARCHAR(50)
 );
 
 CREATE TABLE books
