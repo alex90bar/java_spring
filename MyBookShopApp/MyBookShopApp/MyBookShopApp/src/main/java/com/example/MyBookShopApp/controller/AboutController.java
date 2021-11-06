@@ -8,7 +8,7 @@ public class AboutController {
 
   @GetMapping("/about")
   public String documentsPage(){
-    return "/documents/index";
+    return "/about";
   }
 
 }

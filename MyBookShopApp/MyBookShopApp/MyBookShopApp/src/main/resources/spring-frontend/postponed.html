@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="/assets/css/extra.min.css?v=04238027"><!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script defer src="/assets/js/scripts.min.js?v=04238027"></script>
+  <div th:replace="~{fragments/script_locale_change_fragment :: scriptFragment}"></div>
 </head>
 <body class="Site">
   <!--if lt IE 8
@@ -44,7 +45,7 @@
   <div class="Middle">
     <div class="wrap">
       <main class="Middle-main">
-        <h1 class="Middle-title">Отложенное
+        <h1 class="Middle-title" th:text="#{postponed.title}">Отложенное
         </h1>
         <form class="form Cart Cart_postponed" action="#" method="post">
           <div class="Cart-product">

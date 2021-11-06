@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="/assets/css/extra.min.css?v=64223515"><!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <script defer src="/assets/js/scripts.min.js?v=64223515"></script>
+  <div th:replace="~{fragments/script_locale_change_fragment :: scriptFragment}"></div>
 </head>
 <body class="Site">
   <!--if lt IE 8
@@ -46,7 +47,7 @@
       <main class="Middle-main">
         <div class="Section">
           <div class="Section-header">
-            <h2 class="Section-title">Рекомендуемое
+            <h2 class="Section-title" th:text="#{topbar.recommended}">Рекомендуемое
             </h2>
           </div>
           <div class="Slider Slider_carousel">
@@ -77,7 +78,7 @@
             </div>
           </div>
           <div class="Section-header">
-            <h2 class="Section-title">Новинки
+            <h2 class="Section-title" th:text="#{topbar.news}">Новинки
             </h2>
           </div>
           <div class="Slider Slider_carousel">
@@ -221,7 +222,7 @@
             </div>
           </div>
           <div class="Section-header">
-            <h2 class="Section-title">Популярное
+            <h2 class="Section-title" th:text="#{topbar.popular}">Популярное
             </h2>
           </div>
           <div class="Slider Slider_carousel">
@@ -357,7 +358,7 @@
             </div>
           </div>
         </div>
-        <h2 class="Middle-title">Книги по тегам
+        <h2 class="Middle-title" th:text="#{topbar.tags}">Книги по тегам
         </h2>
         <div class="Tags" id="tags">
           <div class="Tag Tag_xs"><a href="/tags/index.html">современная литература</a>
