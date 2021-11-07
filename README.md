@@ -11,4 +11,6 @@ MyBookShopApp - это учебный проект на Spring Boot, с испо
 Выполнена локализация пользовательского интерфейса - реализована возможность смены языка с помощью инструментов Thymeleaf и класса конфигурации LocaleChangeConfig, который является бином интерфейса LocaleResolver. Обработка пользовательского действия выполняется на JavaScript и помещена в шаблон Thymeleaf.
 
 Скрипт для запуска приложения:
-mvn package && java -jar target/MyBookShopApp-0.0.1-SNAPSHOT.jar
+
+`mvn package && java -jar target/MyBookShopApp-0.0.1-SNAPSHOT.jar`
+
