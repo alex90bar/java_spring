@@ -4,11 +4,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
-  List<Book> findBooksByAuthor_FirstName(String name);
+  //List<BookEntity> findBooksByAuthor_FirstName(String name);
 
-  @Query("from Book")
-  List<Book> customFindAllBooks();
+  //@Query("from BookEntity")
+  //List<BookEntity> customFindAllBooks();
 
 }

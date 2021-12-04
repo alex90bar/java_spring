@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.controller;
 
-import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ public class BooksPopularController {
   }
 
   @ModelAttribute("booksList")
-  public List<Book> bookList(){
+  public List<BookEntity> bookList(){
     return bookService.getBooksData();
   }
 

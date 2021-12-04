@@ -1,18 +1,10 @@
 package com.example.MyBookShopApp.controller;
 
-import com.example.MyBookShopApp.data.Author;
-import com.example.MyBookShopApp.data.AuthorService;
-import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookService;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -28,7 +20,7 @@ public class MainPageController {
   }
 
   @ModelAttribute("recommendedBooks")
-  public List<Book> recommendedBooks(){
+  public List<BookEntity> recommendedBooks(){
     return bookService.getBooksData();
   }
 

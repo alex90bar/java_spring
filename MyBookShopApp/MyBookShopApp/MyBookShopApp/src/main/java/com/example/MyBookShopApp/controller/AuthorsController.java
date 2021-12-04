@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.controller;
 
-import com.example.MyBookShopApp.data.Author;
+import com.example.MyBookShopApp.data.AuthorEntity;
 import com.example.MyBookShopApp.data.AuthorService;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class AuthorsController {
   }
 
   @ModelAttribute("authorsMap")
-  public Map<String, List<Author>> authorsMap(){
+  public Map<String, List<AuthorEntity>> authorsMap(){
     return authorService.getAuthorsMap();
   }
 

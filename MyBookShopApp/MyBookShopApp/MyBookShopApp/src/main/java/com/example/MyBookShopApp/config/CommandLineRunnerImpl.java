@@ -59,11 +59,11 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     //deleteTestEntityById(4L);
 
-    Logger.getLogger(CommandLineRunnerImpl.class.getSimpleName())
-        .info(bookRepository.findBooksByAuthor_FirstName("Kimberli").toString());
-
-    Logger.getLogger(CommandLineRunnerImpl.class.getSimpleName())
-        .info(bookRepository.customFindAllBooks().toString());
+//    Logger.getLogger(CommandLineRunnerImpl.class.getSimpleName())
+//        .info(bookRepository.findBooksByAuthor_FirstName("Kimberli").toString());
+//
+//    Logger.getLogger(CommandLineRunnerImpl.class.getSimpleName())
+//        .info(bookRepository.customFindAllBooks().toString());
 
   }
 
