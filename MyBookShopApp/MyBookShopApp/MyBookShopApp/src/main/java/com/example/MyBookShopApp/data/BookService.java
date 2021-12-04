@@ -12,7 +12,7 @@ public class BookService {
 
   //private JdbcTemplate jdbcTemplate;
 
-  private BookRepository bookRepository;
+  private final BookRepository bookRepository;
 
   @Autowired
   public BookService(BookRepository bookRepository) {

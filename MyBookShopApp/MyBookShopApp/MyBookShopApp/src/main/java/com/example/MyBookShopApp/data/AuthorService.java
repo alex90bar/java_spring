@@ -14,12 +14,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorService {
 
-  private JdbcTemplate jdbcTemplate;
+//  private JdbcTemplate jdbcTemplate;
+
+  private final AuthorRepository authorRepository;
 
   @Autowired
-  public AuthorService(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
+  public AuthorService(AuthorRepository authorRepository) {
+    this.authorRepository = authorRepository;
   }
+
+  //  @Autowired
+//  public AuthorService(JdbcTemplate jdbcTemplate) {
+//    this.jdbcTemplate = jdbcTemplate;
+//  }
 
 //  public List<Author> getAuthorsData() {
 //    List<Author> authors = jdbcTemplate
@@ -38,16 +45,20 @@ public class AuthorService {
 //  }
 
   public Map<String, List<Author>> getAuthorsMap() {
-    List<Author> authors = jdbcTemplate
-        .query("SELECT * FROM authors",
-            (ResultSet rs, int rowNum) -> {
-// ResultSet с результатами запроса и номер текущей строки на вход передаются
-              Author author = new Author();
-              author.setId(rs.getInt("id"));
-              author.setFirstName(rs.getString("first_name"));
-              author.setLastName(rs.getString("last_name"));
-              return author;
-            });
+
+    List<Author> authors = authorRepository.findAll();
+
+//    List<Author> authors = jdbcTemplate
+//        .query("SELECT * FROM authors",
+//            (ResultSet rs, int rowNum) -> {
+//// ResultSet с результатами запроса и номер текущей строки на вход передаются
+//              Author author = new Author();
+//              author.setId(rs.getInt("id"));
+//              author.setFirstName(rs.getString("first_name"));
+//              author.setLastName(rs.getString("last_name"));
+//              return author;
+//            });
+
     return authors.stream().collect(Collectors.groupingBy((Author a) -> {
       return a.getLastName().substring(0,1);
     }));
