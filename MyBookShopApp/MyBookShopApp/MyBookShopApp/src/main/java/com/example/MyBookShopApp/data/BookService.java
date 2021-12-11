@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import io.swagger.models.auth.In;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,34 @@ public class BookService {
 
   public List<BookEntity> getBooksData() {
     return bookRepository.findAll();
+  }
+
+    // NEW BOOK SERVICE METHODS
+
+  public List<BookEntity> getBooksByAuthor(String authorName) {
+    return bookRepository.findBookEntitiesByAuthorNameContaining(authorName);
+  }
+
+  public List<BookEntity> getBooksByTitle(String title){
+    return bookRepository.findBookEntitiesByTitleContaining(title);
+  }
+
+  public List<BookEntity> getBooksWithPriceBetween(Integer min, Integer max){
+    return bookRepository.findBookEntitiesByPriceOldBetween(min, max);
+  }
+
+  public List<BookEntity> getBooksWithPrice(Integer price){
+    return bookRepository.findBookEntitiesByPriceOldIs(price);
+  }
+
+  public List<BookEntity> getBooksWithMaxDiscount(){
+    return bookRepository.getBooksWithMaxDiscount();
+  }
+
+  public List<BookEntity> getBestsellers(){
+    return bookRepository.getBestsellers();
+  }
+
 
 //    List<Book> books = jdbcTemplate
 //        .query("SELECT * FROM books",
@@ -69,4 +98,4 @@ public class BookService {
 //    return new ArrayList<>(books);
 //
 //  }
-}
+
