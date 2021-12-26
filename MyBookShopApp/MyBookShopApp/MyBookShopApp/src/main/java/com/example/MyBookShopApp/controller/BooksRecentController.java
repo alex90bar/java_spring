@@ -18,9 +18,9 @@ public class BooksRecentController {
 //    return bookService.getBooksData();
 //  }
 
-  @GetMapping("/books/recent")
+  @GetMapping("/books/recent_page")
   public String booksRecentPage(){
-    return "/books/recent";
+    return "/books/recent_page";
   }
 
 }

@@ -22,6 +22,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
   List<BookEntity> findBookEntitiesByPriceOldIs(Integer price);
 
+  Page<BookEntity> findAllByOrderByPubDateDesc(Pageable nextPage);
+
   @Query("from BookEntity where isBestseller=1")
   List<BookEntity> getBestsellers();
 

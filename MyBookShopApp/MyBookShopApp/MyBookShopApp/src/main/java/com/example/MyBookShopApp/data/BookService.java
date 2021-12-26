@@ -60,6 +60,16 @@ public class BookService {
     return bookRepository.findAll(nextPage);
   }
 
+  public Page<BookEntity> getPageOfNewBooks(Integer offset, Integer limit){
+    Pageable nextPage = PageRequest.of(offset, limit);
+    return bookRepository.findAllByOrderByPubDateDesc(nextPage);
+  }
+
+  public Page<BookEntity> getPageOfPopularBooks(Integer offset, Integer limit){
+    Pageable nextPage = PageRequest.of(offset, limit);
+    return bookRepository.findAll(nextPage);
+  }
+
   public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit){
     Pageable nextPage = PageRequest.of(offset, limit);
     return bookRepository.findBookEntityByTitleContaining(searchWord, nextPage);
