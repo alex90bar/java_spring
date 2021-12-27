@@ -65,6 +65,39 @@ public class BookEntity {
   @ApiModelProperty("discount value for book")
   private Double price;
 
+  @Column(name = "b_popularity")
+  private int bPopularity;
+
+  @Column(name = "c_popularity")
+  private int cPopularity;
+
+  @Column(name = "k_popularity")
+  private int kPopularity;
+
+  public int getbPopularity() {
+    return bPopularity;
+  }
+
+  public void setbPopularity(int bPopularity) {
+    this.bPopularity = bPopularity;
+  }
+
+  public int getcPopularity() {
+    return cPopularity;
+  }
+
+  public void setcPopularity(int cPopularity) {
+    this.cPopularity = cPopularity;
+  }
+
+  public int getkPopularity() {
+    return kPopularity;
+  }
+
+  public void setkPopularity(int kPopularity) {
+    this.kPopularity = kPopularity;
+  }
+
   public Integer getId() {
     return id;
   }

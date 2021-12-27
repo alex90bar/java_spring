@@ -23,7 +23,7 @@ public class BooksRecentController {
 
   @ModelAttribute("newBooks")
   public List<BookEntity> newBooks(){
-    return bookService.getPageOfNewBooks(0, 5).getContent();
+    return bookService.getPageOfNewBooks(0, 20).getContent();
   }
 
   @GetMapping("/books/recent_page")

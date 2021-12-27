@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
@@ -33,6 +34,10 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
   @Query(value = "SELECT * FROM book WHERE discount = (SELECT MAX(discount) FROM book)", nativeQuery = true)
   List<BookEntity> getBooksWithMaxDiscount();
+
+  @Query(value = "SELECT * FROM book "
+      + "ORDER BY (b_popularity + (0.7 * c_popularity) + (0.4 * k_popularity)) desc", nativeQuery = true)
+  Page<BookEntity> getPopularBooks(Pageable nextPage);
 
   Page<BookEntity> findBookEntityByTitleContaining(String bookTitle, Pageable nextPage);
 

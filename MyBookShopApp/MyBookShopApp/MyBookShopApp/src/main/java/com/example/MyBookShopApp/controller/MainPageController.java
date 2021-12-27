@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.controller;
 import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookService;
 import com.example.MyBookShopApp.data.BooksPageDto;
+import com.example.MyBookShopApp.data.BooksRatingAndPopulatityService;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainPageController {
 
   private final BookService bookService;
+  private final BooksRatingAndPopulatityService booksRatingAndPopulatityService;
  // private final AuthorService authorService;
 
   @Autowired
-  public MainPageController(BookService bookService) {
+  public MainPageController(BookService bookService,
+      BooksRatingAndPopulatityService booksRatingAndPopulatityService) {
     this.bookService = bookService;
+    this.booksRatingAndPopulatityService = booksRatingAndPopulatityService;
   }
 
   @ModelAttribute("recommendedBooks")
@@ -39,7 +43,7 @@ public class MainPageController {
 
   @ModelAttribute("popularBooks")
   public List<BookEntity> popularBooks(){
-    return bookService.getPageOfPopularBooks(0, 6).getContent();
+    return booksRatingAndPopulatityService.getPageOfPopularBooks(0, 6).getContent();
   }
 
   @ModelAttribute("searchWordDto")
@@ -63,7 +67,7 @@ public class MainPageController {
   @ResponseBody
   public BooksPageDto getBooksPopularPage(@RequestParam("offset") Integer offset,
       @RequestParam("limit") Integer limit){
-    return new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
+    return new BooksPageDto(booksRatingAndPopulatityService.getPageOfPopularBooks(offset, limit).getContent());
   }
 
   @GetMapping("/books/recent")
