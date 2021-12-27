@@ -1,5 +1,7 @@
 package com.example.MyBookShopApp.data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
   List<BookEntity> findBookEntitiesByPriceOldIs(Integer price);
 
   Page<BookEntity> findAllByOrderByPubDateDesc(Pageable nextPage);
+
+  Page<BookEntity> findBookEntitiesByPubDateBetweenOrderByPubDateDesc(LocalDateTime from, LocalDateTime to, Pageable nextPage);
 
   @Query("from BookEntity where isBestseller=1")
   List<BookEntity> getBestsellers();

@@ -4,6 +4,7 @@ import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookService;
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +68,16 @@ public class MainPageController {
 
   @GetMapping("/books/recent")
   @ResponseBody
-  public BooksPageDto getBooksRecentPage(@RequestParam("offset") Integer offset,
+  public BooksPageDto getBooksRecentPage(@RequestParam(value = "from", required = false) String from,
+      @RequestParam(value = "to", required = false) String to,
+      @RequestParam("offset") Integer offset,
       @RequestParam("limit") Integer limit){
-    return new BooksPageDto(bookService.getPageOfNewBooks(offset, limit).getContent());
+    if (from==null || to==null) {
+      return new BooksPageDto(bookService.getPageOfNewBooks(offset, limit).getContent());
+    } else {
+      return new BooksPageDto(bookService.getPageOfNewBooksFromTo(from, to, offset, limit).getContent());
+    }
+
   }
 
   @GetMapping(value = {"/search", "/search/{searchWord}"})

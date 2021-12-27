@@ -1,6 +1,9 @@
 package com.example.MyBookShopApp.data;
 
 import io.swagger.models.auth.In;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,6 +67,16 @@ public class BookService {
     Pageable nextPage = PageRequest.of(offset, limit);
     return bookRepository.findAllByOrderByPubDateDesc(nextPage);
   }
+
+  public Page<BookEntity> getPageOfNewBooksFromTo(String from, String to, Integer offset, Integer limit){
+    Pageable nextPage = PageRequest.of(offset, limit);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    LocalDateTime fromDate = LocalDate.parse(from, formatter).atStartOfDay();
+    LocalDateTime toDate = LocalDate.parse(to, formatter).atStartOfDay();
+    return bookRepository.findBookEntitiesByPubDateBetweenOrderByPubDateDesc(fromDate, toDate, nextPage);
+  }
+
+
 
   public Page<BookEntity> getPageOfPopularBooks(Integer offset, Integer limit){
     Pageable nextPage = PageRequest.of(offset, limit);

@@ -23,7 +23,7 @@ public class BooksPopularController {
 
   @GetMapping("/books/popular_page")
   public String booksPopularPage(){
-    return "popular_page";
+    return "/books/popular_page";
   }
 
 }

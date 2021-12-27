@@ -1,8 +1,11 @@
 package com.example.MyBookShopApp.controller;
 
+import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookService;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class BooksRecentController {
@@ -17,6 +20,11 @@ public class BooksRecentController {
 //  public List<Book> bookList(){
 //    return bookService.getBooksData();
 //  }
+
+  @ModelAttribute("newBooks")
+  public List<BookEntity> newBooks(){
+    return bookService.getPageOfNewBooks(0, 5).getContent();
+  }
 
   @GetMapping("/books/recent_page")
   public String booksRecentPage(){
