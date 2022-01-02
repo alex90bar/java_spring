@@ -34,6 +34,11 @@ public class BookEntity {
   @JsonIgnore
   private AuthorEntity author;
 
+  @ManyToOne
+  @JoinColumn(name = "tag_id", referencedColumnName = "id")
+  @JsonIgnore
+  private TagEntity tag;
+
   @Column(name = "is_bestseller", columnDefinition = "SMALLINT NOT NULL")
   @ApiModelProperty("if is_bestseller=1 so the book is considered to be bestseller, "
       + "if 0 the book is not a bestseller")

@@ -1,6 +1,5 @@
 package com.example.MyBookShopApp.data;
 
-import io.swagger.models.auth.In;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -86,6 +85,15 @@ public class BookService {
   public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit){
     Pageable nextPage = PageRequest.of(offset, limit);
     return bookRepository.findBookEntityByTitleContaining(searchWord, nextPage);
+  }
+
+  public Page<BookEntity> getPageOfBooksByTagId(Integer tagId, Integer offset, Integer limit){
+    Pageable nextPage = PageRequest.of(offset, limit);
+    return bookRepository.findBookEntityByTagIdOrderByPubDateDesc(tagId, nextPage);
+  }
+
+  public List<BookEntity> getBooksByTag(Integer tagId){
+    return bookRepository.findBookEntitiesByTagId(tagId);
   }
 
 

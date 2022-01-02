@@ -41,4 +41,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
   Page<BookEntity> findBookEntityByTitleContaining(String bookTitle, Pageable nextPage);
 
+  Page<BookEntity> findBookEntityByTagIdOrderByPubDateDesc(Integer tagId, Pageable nextPage);
+
+  List<BookEntity> findBookEntitiesByTagId(Integer tagId);
 }
