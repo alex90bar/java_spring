@@ -1,5 +1,9 @@
 package com.example.MyBookShopApp.data.genre;
 
+import com.example.MyBookShopApp.data.BookEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +22,15 @@ public class GenreEntity {
 
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     private String name;
+
+    @OneToMany(mappedBy = "genre")
+    @JsonIgnore
+    private List<BookEntity> bookList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
     public int getId() {
         return id;
@@ -49,5 +62,13 @@ public class GenreEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<BookEntity> getBookList() {
+        return bookList;
+    }
+
+    public void setBookList(List<BookEntity> bookList) {
+        this.bookList = bookList;
     }
 }
