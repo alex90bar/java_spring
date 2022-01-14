@@ -92,6 +92,11 @@ public class BookService {
     return bookRepository.findBookEntityByTagIdOrderByPubDateDesc(tagId, nextPage);
   }
 
+  public Page<BookEntity> getPageOfBooksByAuthorId(Integer tagId, Integer offset, Integer limit){
+    Pageable nextPage = PageRequest.of(offset, limit);
+    return bookRepository.findBookEntitiesByAuthorIdOrderByPubDateDesc(tagId, nextPage);
+  }
+
   public Page<BookEntity> getPageOfBooksByGenreId(Integer genreId, Integer offset, Integer limit){
     Pageable nextPage = PageRequest.of(offset, limit);
     return bookRepository.findBookEntityByGenreIdOrderByPubDateDesc(genreId, nextPage);

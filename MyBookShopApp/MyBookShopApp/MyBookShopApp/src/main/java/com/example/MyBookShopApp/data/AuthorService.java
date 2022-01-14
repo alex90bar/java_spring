@@ -58,4 +58,8 @@ public class AuthorService {
       return a.getName().substring(0,1);
     }));
   }
+
+  public AuthorEntity getAuthorById(Integer authorId) {
+    return authorRepository.findAuthorEntityById(authorId);
+  }
 }
