@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.data.book.file.BookFileEntity;
 import com.example.MyBookShopApp.data.genre.GenreEntity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,6 +9,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -68,6 +72,9 @@ public class BookEntity {
   @ApiModelProperty("image url")
   private String image;
 
+  @OneToMany(mappedBy = "book")
+  private List<BookFileEntity> bookFileList = new ArrayList<>();
+
   @Column(columnDefinition = "TEXT")
   @ApiModelProperty("book description text")
   private String description;
@@ -97,6 +104,14 @@ public class BookEntity {
     return discountedPriceInt;
   }
 
+  public List<BookFileEntity> getBookFileList() {
+    return bookFileList;
+  }
+
+  public void setBookFileList(
+      List<BookFileEntity> bookFileList) {
+    this.bookFileList = bookFileList;
+  }
 
   public int getbPopularity() {
     return bPopularity;

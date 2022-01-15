@@ -1,10 +1,13 @@
 package com.example.MyBookShopApp.data.book.file;
 
+import com.example.MyBookShopApp.data.BookEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,14 +18,21 @@ public class BookFileEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+
   private String hash;
 
-  @Column(columnDefinition = "INT NOT NULL")
+  @Column(name = "type_id")
   private int typeId;
 
-  @Column(columnDefinition = "VARCHAR(255) NOT NULL")
   private String path;
+
+  @ManyToOne
+  @JoinColumn(name = "book_id", referencedColumnName = "id")
+  private BookEntity book;
+
+  public String getBookFileExtensionString(){
+    return BookFileType.getExtensionStringByTypeId(typeId);
+  }
 
   public int getId() {
     return id;
