@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data;
 
 import com.example.MyBookShopApp.data.genre.GenreEntity;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -34,6 +35,11 @@ public class BookEntity {
   @JoinColumn(name = "author_id", referencedColumnName = "id")
   @JsonIgnore
   private AuthorEntity author;
+
+  @JsonGetter("authors")
+  public String authorsFullName(){
+    return author.toString();
+  }
 
   @ManyToOne
   @JoinColumn(name = "tag_id", referencedColumnName = "id")
@@ -84,6 +90,13 @@ public class BookEntity {
 
   @Column(name = "k_popularity")
   private int kPopularity;
+
+  @JsonProperty
+  public Integer discountPrice(){
+    Integer discountedPriceInt = priceOld - Math.toIntExact(Math.round(price * priceOld));
+    return discountedPriceInt;
+  }
+
 
   public int getbPopularity() {
     return bPopularity;
