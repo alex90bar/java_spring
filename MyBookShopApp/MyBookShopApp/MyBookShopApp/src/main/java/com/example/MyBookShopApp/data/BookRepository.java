@@ -50,4 +50,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
   List<BookEntity> findBookEntitiesByTagId(Integer tagId);
 
   BookEntity findBookEntityBySlug(String slug);
+
+  List<BookEntity> findBookEntitiesBySlugIn(String[] slugs);
 }
