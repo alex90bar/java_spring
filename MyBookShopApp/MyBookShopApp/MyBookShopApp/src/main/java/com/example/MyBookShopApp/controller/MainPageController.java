@@ -8,6 +8,7 @@ import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.TagEntity;
 import com.example.MyBookShopApp.data.TagNameDto;
 import com.example.MyBookShopApp.data.TagService;
+import com.example.MyBookShopApp.errs.EmptySearchException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,11 +124,15 @@ public class MainPageController {
 
   @GetMapping(value = {"/search", "/search/{searchWord}"})
   public String getSearchResults(@PathVariable(value = "searchWord", required = false)
-      SearchWordDto searchWordDto, Model model){
-    model.addAttribute("searchWordDto", searchWordDto);
-    model.addAttribute("searchResults",
-        bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0,5).getContent());
-    return "/search/index";
+      SearchWordDto searchWordDto, Model model) throws EmptySearchException {
+    if (searchWordDto != null) {
+      model.addAttribute("searchWordDto", searchWordDto);
+      model.addAttribute("searchResults",
+          bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
+      return "/search/index";
+    } else {
+      throw new EmptySearchException("Поиск по null невозможен");
+    }
   }
 
   @GetMapping("/search/page/{searchWord}")

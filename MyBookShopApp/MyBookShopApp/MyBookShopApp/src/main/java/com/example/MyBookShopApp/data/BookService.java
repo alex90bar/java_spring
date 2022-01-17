@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.errs.BookstoreApiWrongParameterException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,8 +38,17 @@ public class BookService {
     return bookRepository.findBookEntitiesByAuthorNameContaining(authorName);
   }
 
-  public List<BookEntity> getBooksByTitle(String title){
-    return bookRepository.findBookEntitiesByTitleContaining(title);
+  public List<BookEntity> getBooksByTitle(String title) throws BookstoreApiWrongParameterException {
+    if (title.equals("") || title.length() <=1){
+      throw new BookstoreApiWrongParameterException("Wrong values passed to one or more parameters");
+    } else {
+      List<BookEntity> data = bookRepository.findBookEntitiesByTitleContaining(title);
+      if (data.size() > 0){
+        return data;
+      } else {
+        throw new BookstoreApiWrongParameterException("No data found with specified parameters...");
+      }
+    }
   }
 
   public List<BookEntity> getBooksWithPriceBetween(Integer min, Integer max){
