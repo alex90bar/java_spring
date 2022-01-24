@@ -51,6 +51,7 @@ public class BookShopCartController {
     return "cart";
   }
 
+
   @PostMapping("/changeBookStatus/cart/remove/{slug}")
   public String handleRemoveBookFromCartRequest(@PathVariable("slug") String slug,
   @CookieValue(name = "cartContents", required = false) String cartContents,
@@ -89,4 +90,8 @@ public class BookShopCartController {
     return "redirect:/books/" + slug;
   }
 
-}
+
+  }
+
+
+

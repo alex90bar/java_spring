@@ -49,6 +49,7 @@
         </h1>
         <h2 th:if="${isCartEmpty}">Корзина пуста...:(</h2>
         <form class="form Cart" action="#" method="post">
+
           <div class="Cart-product" th:each="book : ${bookCart}">
             <div class="Cart-block Cart-block_row">
               <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#">
@@ -121,7 +122,7 @@
                   </div>
                   <div class="Cart-price" th:text="${book.discountPrice()}">180 р.
                   </div>
-                  <div class="Cart-sale"th:text="${'-' + book.price * 100}">-30%
+                  <div class="Cart-sale" th:text="${'-' + book.price * 100}">-30%
                   </div>
                 </div>
               </div>
@@ -137,6 +138,7 @@
             <div class="Cart-block"><a class="btn btn_success btn_md" href="/order.html" th:text="#{cart.buy}">Купить</a>
             </div>
           </div>
+
         </form>
       </main>
     </div>
