@@ -2,9 +2,13 @@ package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookRepository;
+import com.example.MyBookShopApp.data.RatingEntity;
+import com.example.MyBookShopApp.data.RatingRepository;
 import com.example.MyBookShopApp.data.ResourceStorage;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -25,18 +29,80 @@ import org.springframework.web.multipart.MultipartFile;
 public class BooksController {
 
   private final BookRepository bookRepository;
+  private final RatingRepository ratingRepository;
   private final ResourceStorage storage;
 
   @Autowired
-  public BooksController(BookRepository bookRepository, ResourceStorage storage) {
+  public BooksController(BookRepository bookRepository,
+      RatingRepository ratingRepository, ResourceStorage storage) {
     this.bookRepository = bookRepository;
+    this.ratingRepository = ratingRepository;
     this.storage = storage;
+  }
+
+  public int countRating(RatingEntity ratingEntity){
+    int ratingTotal = ((ratingEntity.getOneStar()) + (ratingEntity.getTwoStar() * 2) +
+        (ratingEntity.getThreeStar() * 3) + (ratingEntity.getFourStar() * 4) +
+        (ratingEntity.getFiveStar() * 5));
+    double ratingCount =  (ratingEntity.getOneStar() + ratingEntity.getTwoStar() +
+        ratingEntity.getThreeStar() + ratingEntity.getFourStar() + ratingEntity.getFiveStar());
+
+    return (int) Math.round(ratingTotal / ratingCount);
+
   }
 
   @GetMapping("/{slug}")
   public String bookPage(@PathVariable("slug") String slug, Model model){
     BookEntity book = bookRepository.findBookEntityBySlug(slug);
     model.addAttribute("slugBook", book);
+
+    RatingEntity ratingEntity = ratingRepository.findRatingEntityByBookId(book.getId());
+    if (ratingEntity != null){
+      int rating = countRating(ratingEntity);
+
+
+      ArrayList<String> starModel = new ArrayList<>();
+      switch (rating){
+        case 0: starModel.addAll(Arrays.asList("Rating-star", "Rating-star",
+            "Rating-star", "Rating-star", "Rating-star"));
+        break;
+        case 1: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star",
+            "Rating-star", "Rating-star", "Rating-star"));
+          break;
+        case 2: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+            "Rating-star", "Rating-star", "Rating-star"));
+          break;
+        case 3: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+            "Rating-star Rating-star_view", "Rating-star", "Rating-star"));
+          break;
+        case 4: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+            "Rating-star Rating-star_view", "Rating-star Rating-star_view", "Rating-star"));
+          break;
+        case 5: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+            "Rating-star Rating-star_view", "Rating-star Rating-star_view", "Rating-star Rating-star_view"));
+          break;
+      }
+      int ratingVotes = ratingEntity.getOneStar() + ratingEntity.getTwoStar() + ratingEntity.getThreeStar() +
+          ratingEntity.getFourStar() + ratingEntity.getFiveStar();
+
+      model.addAttribute("starModel", starModel);
+      model.addAttribute("rating", rating);
+      model.addAttribute("ratingVotes", ratingVotes);
+      model.addAttribute("ratingEntity", ratingEntity);
+    } else {
+
+      ArrayList<String> starModel = new ArrayList<>(Arrays.asList("Rating-star", "Rating-star",
+          "Rating-star", "Rating-star", "Rating-star"));
+      int rating = 0;
+      int ratingVotes = 0;
+      ratingEntity = new RatingEntity(0,0,0,0,0);
+
+      model.addAttribute("starModel", starModel);
+      model.addAttribute("rating", rating);
+      model.addAttribute("ratingVotes", ratingVotes);
+      model.addAttribute("ratingEntity", ratingEntity);
+    }
+
     return "/books/slug";
   }
 
