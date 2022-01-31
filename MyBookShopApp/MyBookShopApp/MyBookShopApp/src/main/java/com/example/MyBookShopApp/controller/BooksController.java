@@ -5,10 +5,13 @@ import com.example.MyBookShopApp.data.BookRepository;
 import com.example.MyBookShopApp.data.RatingEntity;
 import com.example.MyBookShopApp.data.RatingRepository;
 import com.example.MyBookShopApp.data.ResourceStorage;
+import com.example.MyBookShopApp.data.ReviewEntity;
+import com.example.MyBookShopApp.data.ReviewRepository;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -31,13 +34,16 @@ public class BooksController {
   private final BookRepository bookRepository;
   private final RatingRepository ratingRepository;
   private final ResourceStorage storage;
+  private final ReviewRepository reviewRepository;
 
   @Autowired
   public BooksController(BookRepository bookRepository,
-      RatingRepository ratingRepository, ResourceStorage storage) {
+      RatingRepository ratingRepository, ResourceStorage storage,
+      ReviewRepository reviewRepository) {
     this.bookRepository = bookRepository;
     this.ratingRepository = ratingRepository;
     this.storage = storage;
+    this.reviewRepository = reviewRepository;
   }
 
   public int countRating(RatingEntity ratingEntity){
@@ -102,6 +108,10 @@ public class BooksController {
       model.addAttribute("ratingVotes", ratingVotes);
       model.addAttribute("ratingEntity", ratingEntity);
     }
+
+    List<ReviewEntity> reviewEntityList = reviewRepository.findReviewEntitiesByBookId(book.getId());
+    model.addAttribute("reviewEntityList", reviewEntityList);
+
 
     return "/books/slug";
   }

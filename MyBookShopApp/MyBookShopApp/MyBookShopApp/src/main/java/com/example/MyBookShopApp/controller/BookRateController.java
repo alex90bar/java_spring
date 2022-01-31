@@ -3,9 +3,13 @@ package com.example.MyBookShopApp.controller;
 import com.example.MyBookShopApp.data.BookRepository;
 import com.example.MyBookShopApp.data.RatingEntity;
 import com.example.MyBookShopApp.data.RatingRepository;
+import com.example.MyBookShopApp.data.ReviewEntity;
+import com.example.MyBookShopApp.data.ReviewRepository;
+import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class BookRateController {
 
   private final RatingRepository ratingRepository;
+  private final ReviewRepository reviewRepository;
 
   @Autowired
-  public BookRateController(RatingRepository ratingRepository) {
+  public BookRateController(RatingRepository ratingRepository,
+      ReviewRepository reviewRepository) {
     this.ratingRepository = ratingRepository;
+    this.reviewRepository = reviewRepository;
   }
 
   public void increaseRating(RatingEntity ratingEntity, int rating){
@@ -34,9 +41,37 @@ public class BookRateController {
     }
   }
 
+  @PostMapping("/rateBookReview")
+  public String reviewBook(@RequestParam("reviewid") int reviewId,
+      @RequestParam("value") int value){
+    ReviewEntity reviewEntity = reviewRepository.findReviewEntityById(reviewId);
+    if (value == 1){
+      reviewEntity.setLikes(reviewEntity.getLikes() + 1);
+    } else {
+      reviewEntity.setDislike(reviewEntity.getDislike() + 1);
+    }
+    reviewRepository.save(reviewEntity);
+    return "/books/slug";
+  }
+
+
+  @PostMapping("/bookReview")
+  public String reviewBook(@RequestParam("bookId") int bookId,
+      @RequestParam("text") String text){
+    ReviewEntity reviewEntity = new ReviewEntity();
+    reviewEntity.setBookId(bookId);
+    reviewEntity.setText(text);
+    reviewEntity.setTime(LocalDateTime.now());
+    reviewEntity.setLikes(0);
+    reviewEntity.setDislike(0);
+    reviewRepository.save(reviewEntity);
+    return "/books/slug";
+  }
+
+
   @PostMapping("/rateBook")
   public String rateBook(@RequestParam("bookId") int bookId,
-      @RequestParam("value") int value, HttpServletRequest request){
+      @RequestParam("value") int value){
     RatingEntity ratingEntity = ratingRepository.findRatingEntityByBookId(bookId);
     if (ratingEntity != null){
 
@@ -53,5 +88,10 @@ public class BookRateController {
    // return "redirect:/";
     //return ("redirect:" + request.getHeader("referer"));
     return "/books/slug";
+  }
+
+  @GetMapping("/slugmy")
+  public String getSlugMy(){
+    return "/books/slugmy";
   }
 }
