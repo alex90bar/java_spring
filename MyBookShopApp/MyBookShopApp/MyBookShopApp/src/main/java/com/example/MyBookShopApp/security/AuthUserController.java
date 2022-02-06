@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.security;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +39,7 @@ public class AuthUserController {
   public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody
       ContactConfirmationPayload payload) {
     ContactConfirmationResponse response = new ContactConfirmationResponse();
-    response.setResult(true);
+    response.setResult("true");
     return response;
   }
 
@@ -47,7 +48,7 @@ public class AuthUserController {
   public ContactConfirmationResponse handleApproveContact(@RequestBody
       ContactConfirmationPayload payload) {
     ContactConfirmationResponse response = new ContactConfirmationResponse();
-    response.setResult(true);
+    response.setResult("true");
     return response;
   }
 
@@ -62,8 +63,13 @@ public class AuthUserController {
   @PostMapping("/login")
   @ResponseBody
   public ContactConfirmationResponse handleLogin(@RequestBody
-      ContactConfirmationPayload payload) {
-    return userRegister.login(payload);
+      ContactConfirmationPayload payload, HttpServletResponse httpServletResponse) {
+//    return userRegister.login(payload);
+
+    ContactConfirmationResponse loginResponse = userRegister.jwtLogin(payload);
+    Cookie cookie = new Cookie("token", loginResponse.getResult());
+    httpServletResponse.addCookie(cookie);
+    return loginResponse;
   }
 
   @GetMapping("/my")
@@ -77,19 +83,16 @@ public class AuthUserController {
     return "profile";
   }
 
-  @GetMapping("/logout")
-  public String handleLogout(HttpServletRequest request){
-    HttpSession session = request.getSession();
-    SecurityContextHolder.clearContext();
-    if (session != null){
-      session.invalidate();
-    }
-
-    for (Cookie cookie : request.getCookies()){
-      cookie.setMaxAge(0);
-    }
-
-    return "redirect:/";
-
-  }
+//  @GetMapping("/logout")
+//  public String handleLogout(HttpServletRequest request){
+//    HttpSession session = request.getSession();
+//    SecurityContextHolder.clearContext();
+//    if (session != null){
+//      session.invalidate();
+//    }
+//    for (Cookie cookie : request.getCookies()){
+//      cookie.setMaxAge(0);
+//    }
+//    return "redirect:/";
+//  }
 }

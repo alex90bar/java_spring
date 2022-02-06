@@ -2,13 +2,13 @@ package com.example.MyBookShopApp.security;
 
 public class ContactConfirmationResponse {
 
-  private boolean result;
+  private String result;
 
-  public boolean isResult() {
+  public String getResult() {
     return result;
   }
 
-  public void setResult(boolean result) {
+  public void setResult(String result) {
     this.result = result;
   }
 }
