@@ -1,6 +1,5 @@
 package com.example.MyBookShopApp.security.jwt;
 
-import com.example.MyBookShopApp.security.AuthUserController;
 import com.example.MyBookShopApp.security.BookstoreUserDetails;
 import com.example.MyBookShopApp.security.BookstoreUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -16,21 +15,22 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
 
   private final BookstoreUserDetailsService bookstoreUserDetailsService;
   private final JWTUtil jwtUtil;
+  private final JWTBlacklistRepository jwtBlacklistRepository;
 
   public JWTRequestFilter(
       BookstoreUserDetailsService bookstoreUserDetailsService,
-      JWTUtil jwtUtil) {
+      JWTUtil jwtUtil,
+      JWTBlacklistRepository jwtBlacklistRepository) {
     this.bookstoreUserDetailsService = bookstoreUserDetailsService;
     this.jwtUtil = jwtUtil;
+    this.jwtBlacklistRepository = jwtBlacklistRepository;
   }
 
 
@@ -47,6 +47,21 @@ public class JWTRequestFilter extends OncePerRequestFilter {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("token")) {
           token = cookie.getValue();
+
+          //Обработка Blacklisted-токена
+          if (jwtBlacklistRepository.findJWTBlackListEntityByToken(token) != null){
+            Logger.getLogger(this.getClass().getSimpleName())
+                .warning("Blaklisted token founded, access denied");
+            HttpSession session = httpServletRequest.getSession();
+            SecurityContextHolder.clearContext();
+            if (session != null) {
+              session.invalidate();
+            }
+            cookie.setValue("");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            httpServletResponse.addCookie(cookie);
+          }
 
           //Обработка security-исключения истечения срока действия Jwt-токена
           try {

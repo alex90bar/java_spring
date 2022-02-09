@@ -1,8 +1,6 @@
 package com.example.MyBookShopApp.security.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
@@ -17,8 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class JWTUtil {
 
+  private final JWTBlacklistRepository jwtBlacklistRepository;
+
+  public JWTUtil(
+      JWTBlacklistRepository jwtBlacklistRepository) {
+    this.jwtBlacklistRepository = jwtBlacklistRepository;
+  }
+
   @Value("${auth.secret}")
   private String secret;
+
+
 
   private String createToken(Map<String, Object> claims, String username){
     return Jwts
@@ -26,7 +33,7 @@ public class JWTUtil {
         .setClaims(claims)
         .setSubject(username)
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
 //        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
         .signWith(SignatureAlgorithm.HS256, secret).compact();
   }
@@ -59,10 +66,19 @@ public class JWTUtil {
     return extractExpiration(token).before(new Date());
   }
 
+  public Boolean isTokenBlacklisted(String token){
+    JWTBlackListEntity entity = jwtBlacklistRepository.findJWTBlackListEntityByToken(token);
+    if (entity != null) {
+      Logger.getLogger(this.getClass().getSimpleName())
+          .warning("Blacklisted token founded " + entity.getToken());
+    }
+    return jwtBlacklistRepository.findJWTBlackListEntityByToken(token) != null;
+  }
+
   public Boolean validateToken(String token, UserDetails userDetails) {
 
       String username = extractUsername(token);
-      return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+      return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenBlacklisted(token));
 
   }
 

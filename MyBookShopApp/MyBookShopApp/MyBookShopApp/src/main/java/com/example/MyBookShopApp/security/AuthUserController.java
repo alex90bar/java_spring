@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,6 +89,7 @@ public class AuthUserController {
     model.addAttribute("curUsr", userRegister.getCurrentUser());
     return "profile";
   }
+
 
 //  @GetMapping("/logout")
 //  public String handleLogout(HttpServletRequest request){
