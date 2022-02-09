@@ -1,5 +1,8 @@
 package com.example.MyBookShopApp.security;
 
+import com.example.MyBookShopApp.errs.EmptySearchException;
+import io.jsonwebtoken.ExpiredJwtException;
+import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthUserController {
@@ -59,6 +64,7 @@ public class AuthUserController {
     model.addAttribute("regOk", true);
     return "signin";
   }
+
 
   @PostMapping("/login")
   @ResponseBody
