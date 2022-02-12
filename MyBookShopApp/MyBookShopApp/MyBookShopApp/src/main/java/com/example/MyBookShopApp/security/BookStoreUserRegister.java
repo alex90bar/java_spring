@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -65,6 +66,14 @@ public class BookStoreUserRegister {
   }
 
   public Object getCurrentUser() {
+    if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass() == DefaultOAuth2User.class){
+      DefaultOAuth2User user = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      BookstoreUser bookstoreUser = new BookstoreUser();
+      bookstoreUser.setName(user.getAttribute("name"));
+      bookstoreUser.setEmail(user.getAttribute("email"));
+      return bookstoreUser;
+    }
+
     BookstoreUserDetails userDetails =
         (BookstoreUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return userDetails.getBookstoreUser();
