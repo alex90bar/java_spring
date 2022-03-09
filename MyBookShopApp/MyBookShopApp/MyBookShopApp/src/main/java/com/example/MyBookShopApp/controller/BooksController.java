@@ -18,6 +18,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,20 @@ public class BooksController {
     this.storage = storage;
     this.reviewRepository = reviewRepository;
   }
+
+  public boolean isUserAuthenticated(){
+    if ( SecurityContextHolder.getContext().getAuthentication() != null &&
+        SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+        //when Anonymous Authentication is enabled
+        !(SecurityContextHolder.getContext().getAuthentication()
+            instanceof AnonymousAuthenticationToken) ){
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   public int countRating(RatingEntity ratingEntity){
     int ratingTotal = ((ratingEntity.getOneStar()) + (ratingEntity.getTwoStar() * 2) +
@@ -113,7 +129,14 @@ public class BooksController {
     model.addAttribute("reviewEntityList", reviewEntityList);
 
 
-    return "/books/slug";
+    if (isUserAuthenticated()){
+      model.addAttribute("unauthorizedUser", false);
+    } else {
+      model.addAttribute("unauthorizedUser", true);
+    }
+
+      return "/books/slug";
+
   }
 
   @PostMapping("/{slug}/img/save")

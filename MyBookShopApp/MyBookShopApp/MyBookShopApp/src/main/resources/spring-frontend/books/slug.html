@@ -327,7 +327,7 @@
                     </div>
                   </button>
                 </div>
-                <div class="ProductCard-assessment"><span class="ProductCard-titleProp">Оцените книгу:</span>
+                <div th:if="${!unauthorizedUser}" class="ProductCard-assessment"><span class="ProductCard-titleProp">Оцените книгу:</span>
                   <span class="Rating Rating_input"
                         th:attr="data-bookid = ${slugBook.id}"
                         data-bookid="2121">
@@ -373,6 +373,8 @@
                         </svg></span>
                       <input name="rating" type="radio" value="5"/></span></span>
                 </div>
+
+
                 <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span><a
                     href="/tags/">Современные</a>,&#32;<a
                     th:href="'/slugmy'"

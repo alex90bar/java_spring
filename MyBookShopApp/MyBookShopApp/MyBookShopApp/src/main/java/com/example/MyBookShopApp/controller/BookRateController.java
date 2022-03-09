@@ -6,11 +6,17 @@ import com.example.MyBookShopApp.data.RatingRepository;
 import com.example.MyBookShopApp.data.ReviewEntity;
 import com.example.MyBookShopApp.data.ReviewRepository;
 import java.time.LocalDateTime;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -25,6 +31,7 @@ public class BookRateController {
     this.ratingRepository = ratingRepository;
     this.reviewRepository = reviewRepository;
   }
+
 
   public void increaseRating(RatingEntity ratingEntity, int rating){
     switch (rating){
@@ -42,8 +49,15 @@ public class BookRateController {
   }
 
   @PostMapping("/rateBookReview")
-  public String reviewBook(@RequestParam("reviewid") int reviewId,
-      @RequestParam("value") int value){
+  public String rateBookReview(@RequestBody Map<String, String> json)
+
+//      (@RequestParam("reviewid") int reviewId,
+//      @RequestParam("value") int value)
+
+  {
+    int reviewId = Integer.parseInt(json.get("reviewid"));
+    int value = Integer.parseInt(json.get("value"));
+
     ReviewEntity reviewEntity = reviewRepository.findReviewEntityById(reviewId);
     if (value == 1){
       reviewEntity.setLikes(reviewEntity.getLikes() + 1);
@@ -56,8 +70,15 @@ public class BookRateController {
 
 
   @PostMapping("/bookReview")
-  public String reviewBook(@RequestParam("bookId") int bookId,
-      @RequestParam("text") String text){
+  public String reviewBook(@RequestBody Map<String, String> json)
+
+//      (@RequestParam("bookId") int bookId,
+//      @RequestParam("text") String text)
+
+  {
+    int bookId = Integer.parseInt(json.get("bookId"));
+    String text = json.get("text");
+
     ReviewEntity reviewEntity = new ReviewEntity();
     reviewEntity.setBookId(bookId);
     reviewEntity.setText(text);
@@ -70,24 +91,34 @@ public class BookRateController {
 
 
   @PostMapping("/rateBook")
-  public String rateBook(@RequestParam("bookId") int bookId,
-      @RequestParam("value") int value){
-    RatingEntity ratingEntity = ratingRepository.findRatingEntityByBookId(bookId);
-    if (ratingEntity != null){
+  public String rateBook(@RequestBody Map<String, String> json, Model model)
 
-      increaseRating(ratingEntity, value);
-      ratingRepository.save(ratingEntity);
+//      (@RequestParam("bookId") int bookId,
+//      @RequestParam("value") int value)
 
-    } else {
+  {
+      int bookId = Integer.parseInt(json.get("bookId"));
+      int value = Integer.parseInt(json.get("value"));
 
-      ratingEntity = new RatingEntity(0,0,0,0,0);
-      ratingEntity.setBookId(bookId);
-      increaseRating(ratingEntity, value);
-      ratingRepository.save(ratingEntity);
-    }
-   // return "redirect:/";
-    //return ("redirect:" + request.getHeader("referer"));
-    return "/books/slug";
+      RatingEntity ratingEntity = ratingRepository.findRatingEntityByBookId(bookId);
+      if (ratingEntity != null) {
+
+        increaseRating(ratingEntity, value);
+        ratingRepository.save(ratingEntity);
+
+      } else {
+
+        ratingEntity = new RatingEntity(0, 0, 0, 0, 0);
+        ratingEntity.setBookId(bookId);
+        increaseRating(ratingEntity, value);
+        ratingRepository.save(ratingEntity);
+      }
+      // return "redirect:/";
+      //return ("redirect:" + request.getHeader("referer"));
+
+
+      return "/books/slug";
+
   }
 
   @GetMapping("/slugmy")
