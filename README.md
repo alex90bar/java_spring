@@ -67,9 +67,12 @@ MyBookShopApp - это учебный проект на Spring Boot, с испо
 
 8.7.3. Доработана OAuth-авторизация через Facebook, реализована подгрузка данных пользователя из Facebook.
 
-9.2 Написаны Unit-тесты для класса BookStoreUserRegister
+9.2 Написаны Unit-тесты для класса BookStoreUserRegister.
 
-9.3 Написаны Integration-тесты для MainPageController с использованием MockMvc
+9.3 Написаны Integration-тесты для MainPageController с использованием MockMvc.
+
+9.4 Написаны тесты для MainPage с помощью Selenium.
+
 
 
 Скрипт для запуска приложения:
