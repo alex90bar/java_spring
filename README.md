@@ -69,6 +69,8 @@ MyBookShopApp - это учебный проект на Spring Boot, с испо
 
 9.2 Написаны Unit-тесты для класса BookStoreUserRegister
 
+9.3 Написаны Integration-тесты для MainPageController с использованием MockMvc
+
 
 Скрипт для запуска приложения:
 
