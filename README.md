@@ -73,6 +73,8 @@ MyBookShopApp - это учебный проект на Spring Boot, с испо
 
 9.4 Написаны тесты для MainPage с помощью Selenium.
 
+9.5 Написаны тесты уровня данных для классов BookRepository и BookstoreUserRepository.
+
 
 
 Скрипт для запуска приложения:
