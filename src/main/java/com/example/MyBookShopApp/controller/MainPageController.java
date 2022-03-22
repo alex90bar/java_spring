@@ -129,7 +129,7 @@ public class MainPageController {
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("searchResults",
           bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
-      return "/search/index";
+      return "search/index";
     } else {
       throw new EmptySearchException("Поиск по null невозможен");
     }

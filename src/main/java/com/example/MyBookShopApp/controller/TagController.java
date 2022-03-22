@@ -36,7 +36,7 @@ public class TagController {
     model.addAttribute("tagTitle", tagTitle);
     model.addAttribute("booksList",
         bookService.getPageOfBooksByTagId(tagId, 0,5).getContent());
-    return "/tags/index";
+    return "tags/index";
   }
 
   @GetMapping("/books/tag/{tagName}")

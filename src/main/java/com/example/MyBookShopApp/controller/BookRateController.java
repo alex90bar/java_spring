@@ -65,7 +65,7 @@ public class BookRateController {
       reviewEntity.setDislike(reviewEntity.getDislike() + 1);
     }
     reviewRepository.save(reviewEntity);
-    return "/books/slug";
+    return "books/slug";
   }
 
 
@@ -86,7 +86,7 @@ public class BookRateController {
     reviewEntity.setLikes(0);
     reviewEntity.setDislike(0);
     reviewRepository.save(reviewEntity);
-    return "/books/slug";
+    return "books/slug";
   }
 
 
@@ -117,12 +117,12 @@ public class BookRateController {
       //return ("redirect:" + request.getHeader("referer"));
 
 
-      return "/books/slug";
+      return "books/slug";
 
   }
 
   @GetMapping("/slugmy")
   public String getSlugMy(){
-    return "/books/slugmy";
+    return "books/slugmy";
   }
 }

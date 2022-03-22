@@ -86,7 +86,7 @@ public class GenresController {
     model.addAttribute("genreTitle", genreTitle);
     model.addAttribute("booksList",
         bookService.getPageOfBooksByGenreId(genreId, 0,5).getContent());
-    return "/genres/slug";
+    return "genres/slug";
   }
 
   @GetMapping("/books/genre/{genreName}")
@@ -100,7 +100,7 @@ public class GenresController {
 
   @GetMapping("/genres")
   public String genresPage(){
-    return "/genres/index";
+    return "genres/index";
   }
 
 

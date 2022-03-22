@@ -135,7 +135,7 @@ public class BooksController {
       model.addAttribute("unauthorizedUser", true);
     }
 
-      return "/books/slug";
+      return "books/slug";
 
   }
 

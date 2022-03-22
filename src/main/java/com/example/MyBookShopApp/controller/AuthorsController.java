@@ -53,7 +53,7 @@ public class AuthorsController {
     model.addAttribute("authorEntity", authorEntity);
     model.addAttribute("booksList",
         bookService.getPageOfBooksByAuthorId(authorId, 0,6).getContent());
-    return "/authors/slug";
+    return "authors/slug";
   }
 
   @GetMapping("/books/author_page/{authorId}")
@@ -64,7 +64,7 @@ public class AuthorsController {
     model.addAttribute("booksList",
         bookService.getPageOfBooksByAuthorId(authorId, 0,6).getContent());
 
-    return "/books/author";
+    return "books/author";
   }
 
   @GetMapping("/books/author/{authorId}")
@@ -78,7 +78,7 @@ public class AuthorsController {
 
   @GetMapping("/authors")
   public String authorsPage(){
-    return "/authors/index";
+    return "authors/index";
   }
 
   @ApiOperation("method to get map of authors")

@@ -8,7 +8,7 @@ public class DocumentsController {
 
   @GetMapping("/documents")
   public String documentsPage(){
-    return "/documents/index";
+    return "documents/index";
   }
 
 }

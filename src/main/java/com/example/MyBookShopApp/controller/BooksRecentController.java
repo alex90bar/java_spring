@@ -28,7 +28,7 @@ public class BooksRecentController {
 
   @GetMapping("/books/recent_page")
   public String booksRecentPage(){
-    return "/books/recent_page";
+    return "books/recent_page";
   }
 
 }
