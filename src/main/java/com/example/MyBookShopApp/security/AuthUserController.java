@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.security;
 
+import com.example.MyBookShopApp.data.SmsCode;
 import com.example.MyBookShopApp.errs.EmptySearchException;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.logging.Logger;
@@ -23,10 +24,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthUserController {
 
   private final BookStoreUserRegister userRegister;
+  private final SmsService smsService;
 
   @Autowired
-  public AuthUserController(BookStoreUserRegister userRegister) {
+  public AuthUserController(BookStoreUserRegister userRegister,
+      SmsService smsService) {
     this.userRegister = userRegister;
+    this.smsService = smsService;
   }
 
   @GetMapping("/signin")
@@ -46,7 +50,15 @@ public class AuthUserController {
       ContactConfirmationPayload payload) {
     ContactConfirmationResponse response = new ContactConfirmationResponse();
     response.setResult("true");
-    return response;
+
+    if (payload.getContact().contains("@")){
+      return response;  //for email
+    } else {
+      String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
+      smsService.saveNewCode(new SmsCode(smsCodeString, 60));  //expires in 1 min
+      return response;
+    }
+
   }
 
   @PostMapping("/approveContact")
@@ -54,8 +66,20 @@ public class AuthUserController {
   public ContactConfirmationResponse handleApproveContact(@RequestBody
       ContactConfirmationPayload payload) {
     ContactConfirmationResponse response = new ContactConfirmationResponse();
-    response.setResult("true");
-    return response;
+
+    if (smsService.verifyCode(payload.getCode())){
+      response.setResult("true");
+      return response;
+    } else {
+      if (payload.getContact().contains("@")){
+        response.setResult("true");
+        return response;
+      } else {
+        return new ContactConfirmationResponse();
+      }
+    }
+//    response.setResult("true");
+//    return response;
   }
 
   @PostMapping("/reg")
@@ -78,6 +102,23 @@ public class AuthUserController {
     httpServletResponse.addCookie(cookie);
     return loginResponse;
   }
+
+  @PostMapping("/login-by-phone-number")
+  @ResponseBody
+  public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody
+      ContactConfirmationPayload payload, HttpServletResponse httpServletResponse) {
+
+    if (smsService.verifyCode(payload.getCode())) {
+
+      ContactConfirmationResponse loginResponse = userRegister.jwtLoginByPhoneNumber(payload);
+      Cookie cookie = new Cookie("token", loginResponse.getResult());
+      httpServletResponse.addCookie(cookie);
+      return loginResponse;
+    } else {
+      return null;
+    }
+  }
+
 
   @GetMapping("/my")
   public String handleMy(){

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,13 @@ public class BookStoreUserRegister {
   }
 
   public BookstoreUser registerNewUser(RegistrationForm registrationForm) {
-    if(bookstoreUserRepository.findBookstoreUserByEmail(registrationForm.getEmail()) == null){
+    BookstoreUser userByEmail = bookstoreUserRepository.findBookstoreUserByEmail(
+        registrationForm.getEmail());
+    BookstoreUser userByPhone = bookstoreUserRepository.findBookstoreUserByPhone(
+        registrationForm.getPhone());
+
+//    if(bookstoreUserRepository.findBookstoreUserByEmail(registrationForm.getEmail()) == null){
+    if(userByEmail == null && userByPhone == null){
       BookstoreUser user = new BookstoreUser();
       user.setName(registrationForm.getName());
       user.setEmail(registrationForm.getEmail());
@@ -40,8 +47,10 @@ public class BookStoreUserRegister {
       user.setPassword(passwordEncoder.encode(registrationForm.getPass()));
       bookstoreUserRepository.save(user);
       return user;
+    } else {
+      return userByPhone;
     }
-    return null;
+//    return null;
   }
 
   public ContactConfirmationResponse login(ContactConfirmationPayload payload) {
@@ -66,6 +75,18 @@ public class BookStoreUserRegister {
     return response;
   }
 
+  public ContactConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload payload) {
+    RegistrationForm registrationForm = new RegistrationForm();
+    registrationForm.setPhone(payload.getContact());
+    registrationForm.setPass(payload.getCode());
+    registerNewUser(registrationForm);
+    UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(payload.getContact());
+    String jwtToken = jwtUtil.generateToken(userDetails);
+    ContactConfirmationResponse response = new ContactConfirmationResponse();
+    response.setResult(jwtToken);
+    return response;
+  }
+
   public Object getCurrentUser() {
     if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass() == DefaultOAuth2User.class){
       DefaultOAuth2User user = (DefaultOAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -80,4 +101,6 @@ public class BookStoreUserRegister {
         (BookstoreUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return userDetails.getBookstoreUser();
   }
+
+
 }
