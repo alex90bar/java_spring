@@ -23,7 +23,9 @@ public class EmailConfig {
     mailSender.setPort(465);
     mailSender.setUsername(email);
     mailSender.setPassword(password);
+
     Properties props = mailSender.getJavaMailProperties();
+
     props.put("mail.transport.protocol", "smtps");
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.starttls.enable", "true");
@@ -31,6 +33,13 @@ public class EmailConfig {
     props.put("mail.debug", "true");
 
 
+    props.put("mail.protocol", "smtp");
+    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+    props.put("mail.default-encoding", "UTF-8");
+    props.put("mail.smtp.port",  "465");
+
+
+    mailSender.setJavaMailProperties(props);
     return mailSender;
   }
 
