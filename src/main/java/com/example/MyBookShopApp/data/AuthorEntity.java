@@ -43,6 +43,14 @@ public class AuthorEntity {
   @Column(columnDefinition = "TEXT")
   private String description;
 
+  public AuthorEntity(List<String> authors) {
+    if (authors != null){
+      this.name = authors.toString();
+    }
+  }
+
+  public AuthorEntity(){}
+
   @Override
   public String toString() {
     return name;

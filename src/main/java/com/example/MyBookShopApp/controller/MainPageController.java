@@ -128,7 +128,8 @@ public class MainPageController {
     if (searchWordDto != null) {
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("searchResults",
-          bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
+          bookService.getPageOfGoogleBooksApiSearchResult(searchWordDto.getExample(), 0, 5));
+//          bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
       return "search/index";
     } else {
       throw new EmptySearchException("Поиск по null невозможен");
@@ -141,7 +142,9 @@ public class MainPageController {
       @RequestParam("limit") Integer limit,
       @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto){
     return new BooksPageDto(bookService
-        .getPageOfSearchResultBooks(searchWordDto.getExample(),offset,limit).getContent());
+        .getPageOfGoogleBooksApiSearchResult(searchWordDto.getExample(),offset,limit));
+//    return new BooksPageDto(bookService
+//        .getPageOfSearchResultBooks(searchWordDto.getExample(),offset,limit).getContent());
   }
 
   @GetMapping("/")

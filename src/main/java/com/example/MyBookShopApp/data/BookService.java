@@ -1,15 +1,20 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.data.google.api.books.Item;
+import com.example.MyBookShopApp.data.google.api.books.Root;
 import com.example.MyBookShopApp.errs.BookstoreApiWrongParameterException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class BookService {
@@ -17,10 +22,13 @@ public class BookService {
   //private JdbcTemplate jdbcTemplate;
 
   private final BookRepository bookRepository;
+  private final RestTemplate restTemplate;
 
   @Autowired
-  public BookService(BookRepository bookRepository) {
+  public BookService(BookRepository bookRepository,
+      RestTemplate restTemplate) {
     this.bookRepository = bookRepository;
+    this.restTemplate = restTemplate;
   }
 
   //  @Autowired
@@ -114,6 +122,37 @@ public class BookService {
 
   public List<BookEntity> getBooksByTag(Integer tagId){
     return bookRepository.findBookEntitiesByTagId(tagId);
+  }
+
+  @Value("${google.books.api.key}")
+  private String apiKey;
+
+  public List<BookEntity> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit){
+    String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes"
+        + "?q=" + searchWord
+        + "&key=" + apiKey
+        + "&filter=paid-ebooks"
+        + "&startIndex=" + offset
+        + "&maxResult=" + limit;
+    Root root = restTemplate.getForEntity(REQUEST_URL, Root.class).getBody();
+    ArrayList<BookEntity> list = new ArrayList<>();
+    if (root != null){
+      for (Item item : root.items){
+        BookEntity book = new BookEntity();
+        if (item.volumeInfo != null){
+          book.setAuthor(new AuthorEntity(item.volumeInfo.authors));
+          book.setTitle(item.volumeInfo.title);
+          book.setImage(item.volumeInfo.imageLinks.thumbnail);
+        }
+        if (item.saleInfo != null){
+          book.setPrice(item.saleInfo.retailPrice.amount);
+          Double oldPrice = book.getPrice();
+          book.setPriceOld(oldPrice.intValue());
+        }
+        list.add(book);
+      }
+    }
+    return list;
   }
 
 
