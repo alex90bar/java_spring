@@ -2,6 +2,8 @@ package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.data.BookEntity;
 import com.example.MyBookShopApp.data.BookRepository;
+import com.example.MyBookShopApp.data.PaymentService;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/books")
@@ -28,10 +31,13 @@ public class BookShopCartController {
   }
 
   private final BookRepository bookRepository;
+  private final PaymentService paymentService;
 
   @Autowired
-  public BookShopCartController(BookRepository bookRepository) {
+  public BookShopCartController(BookRepository bookRepository,
+      PaymentService paymentService) {
     this.bookRepository = bookRepository;
+    this.paymentService = paymentService;
   }
 
   @GetMapping("/cart")
@@ -89,6 +95,18 @@ public class BookShopCartController {
     }
     return "redirect:/books/" + slug;
   }
+
+  @GetMapping("/pay")
+  public RedirectView handlePay(@CookieValue(value = "cartContents", required = false) String cartContents)
+      throws NoSuchAlgorithmException {
+    cartContents = cartContents.startsWith("/") ? cartContents.substring(1) : cartContents;
+    cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() -1) : cartContents;
+    String[] cookieSlugs = cartContents.split("/");
+    List<BookEntity> booksFromCookieSlugs = bookRepository.findBookEntitiesBySlugIn(cookieSlugs);
+    String paymentUrl = paymentService.getPaymentUrl(booksFromCookieSlugs);
+    return new RedirectView(paymentUrl);
+  }
+
 
 
   }
