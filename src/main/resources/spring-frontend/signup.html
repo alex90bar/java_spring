@@ -46,7 +46,7 @@
   <div class="Middle Middle_form">
     <div class="Middle-top">
       <div class="wrap">
-        <h1 class="Middle-title">Регистрация
+        <h1 class="Middle-title" th:text="#{signup.registration}">Регистрация
         </h1>
       </div>
     </div>
@@ -60,12 +60,15 @@
             <div class="Login-step">
               <div class="form-group">
                 <input class="form-input" id="name" name="name"
-                       type="text" th:field="*{name}" placeholder="Введите Имя" data-validate="require"/>
+                       type="text" th:field="*{name}"
+                       th:placeholder="#{contacts.enter.name}" placeholder="Введите Имя"
+                       data-validate="require"/>
               </div>
               <div class="form-group form-group_row">
                 <div class="form-group">
                   <input class="form-input form-input_phone" id="phone" name="phone"
-                         type="text" th:field="*{phone}" placeholder="Введите телефон"  data-validate="require"/>
+                         type="text" th:field="*{phone}" th:placeholder="#{signin.enter.phone}"
+                         placeholder="Введите телефон"  data-validate="require"/>
 <!--                  data-mask="+7 (999) 999-99-99"-->
                 </div>
                 <div class="form-group form-group_key">
@@ -79,7 +82,8 @@
               <div class="form-group form-group_row">
                 <div class="form-group">
                   <input class="form-input form-input_mail" id="mail"
-                         name="mail" type="text" th:field="*{email}" placeholder="Введите e-mail"
+                         name="mail" type="text" th:field="*{email}" th:placeholder="#{signin.enter.mail}"
+                         placeholder="Введите e-mail"
                          data-validate="mail require"/>
                 </div>
                 <div class="form-group form-group_key">
@@ -96,12 +100,14 @@
 
               <div class="form-group">
                 <input class="form-input form-input_password" id="pass"
-                       name="pass" type="text" th:field="*{pass}" placeholder="Введите password"
+                       name="pass" type="text" th:field="*{pass}" th:placeholder="#{signup.pass}"
+                       placeholder="Введите password"
                        data-validate="password require"/>
               </div>
 
               <div class="form-group form-group_center">
                 <button class="btn btn_primary form-btn" type="submit"
+                        th:text="#{signin.register}"
                         name="registration" id="registration" disabled="disabled">Зарегистрироваться
                 </button>
               </div>

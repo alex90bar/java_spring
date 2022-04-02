@@ -1,36 +1,31 @@
 package com.example.MyBookShopApp.security;
 
 import com.example.MyBookShopApp.data.SmsCode;
-import com.example.MyBookShopApp.errs.EmptySearchException;
-import io.jsonwebtoken.ExpiredJwtException;
-import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthUserController {
 
   private final BookStoreUserRegister userRegister;
   private final SmsService smsService;
+  private final JavaMailSender javaMailSender;
 
   @Autowired
   public AuthUserController(BookStoreUserRegister userRegister,
-      SmsService smsService) {
+      SmsService smsService, JavaMailSender javaMailSender) {
     this.userRegister = userRegister;
     this.smsService = smsService;
+    this.javaMailSender = javaMailSender;
   }
 
   @GetMapping("/signin")
@@ -58,8 +53,26 @@ public class AuthUserController {
       smsService.saveNewCode(new SmsCode(smsCodeString, 60));  //expires in 1 min
       return response;
     }
-
   }
+
+  @PostMapping("/requestEmailConfirmation")
+  @ResponseBody
+  public ContactConfirmationResponse handleRequestEmailConfirmation(@RequestBody
+      ContactConfirmationPayload payload) {
+    ContactConfirmationResponse response = new ContactConfirmationResponse();
+
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setFrom("nicebookshophelp@gmail.com");
+    message.setTo(payload.getContact());
+    SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
+    smsService.saveNewCode(smsCode);
+    message.setSubject("Bookstore email verification!");
+    message.setText("Verification code is: " + smsCode.getCode());
+    javaMailSender.send(message);
+    response.setResult("true");
+    return response;
+  }
+
 
   @PostMapping("/approveContact")
   @ResponseBody
@@ -69,15 +82,17 @@ public class AuthUserController {
 
     if (smsService.verifyCode(payload.getCode())){
       response.setResult("true");
-      return response;
-    } else {
-      if (payload.getContact().contains("@")){
-        response.setResult("true");
-        return response;
-      } else {
-        return new ContactConfirmationResponse();
-      }
     }
+    return response;
+
+//    else {
+//      if (payload.getContact().contains("@")){
+//        response.setResult("true");
+//        return response;
+//      } else {
+//        return new ContactConfirmationResponse();
+//      }
+//    }
 //    response.setResult("true");
 //    return response;
   }
