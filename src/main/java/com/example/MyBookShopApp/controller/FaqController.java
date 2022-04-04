@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class FaqController {
 
   @GetMapping("/faq")
-  public String faqPage(){
+  public String faqPage() {
     return "faq";
   }
 

@@ -34,35 +34,28 @@ public class AuthorsController {
   }
 
   @ModelAttribute("authorsMap")
-  public Map<String, List<AuthorEntity>> authorsMap(){
+  public Map<String, List<AuthorEntity>> authorsMap() {
     return authorService.getAuthorsMap();
   }
 
   @GetMapping(value = {"/authors/{authorId}"})
   public String getAuthorPage(@PathVariable(value = "authorId", required = false)
-      Integer authorId, Model model){
-
-//    model.addAttribute("authorNameDto", authorNameDto);
-//    Integer authorId = Integer.parseInt(authorNameDto.getExample());
-//    String authorTitle = authorEntity.getName();
-//    String authorPhoto = authorEntity.getPhoto();
-//    model.addAttribute("authorTitle", authorTitle);
-//    model.addAttribute("authorPhoto", authorPhoto);
+      Integer authorId, Model model) {
 
     AuthorEntity authorEntity = authorService.getAuthorById(authorId);
     model.addAttribute("authorEntity", authorEntity);
     model.addAttribute("booksList",
-        bookService.getPageOfBooksByAuthorId(authorId, 0,6).getContent());
+        bookService.getPageOfBooksByAuthorId(authorId, 0, 6).getContent());
     return "authors/slug";
   }
 
   @GetMapping("/books/author_page/{authorId}")
   public String getBooksPageByAuthorId(@PathVariable(value = "authorId", required = false)
-      Integer authorId, Model model){
+      Integer authorId, Model model) {
     AuthorEntity authorEntity = authorService.getAuthorById(authorId);
     model.addAttribute("authorEntity", authorEntity);
     model.addAttribute("booksList",
-        bookService.getPageOfBooksByAuthorId(authorId, 0,6).getContent());
+        bookService.getPageOfBooksByAuthorId(authorId, 0, 6).getContent());
 
     return "books/author";
   }
@@ -72,19 +65,20 @@ public class AuthorsController {
   public BooksPageDto getBookPageByAuthor(@PathVariable(value = "authorId", required = false)
       Integer authorId,
       @RequestParam("offset") Integer offset,
-      @RequestParam("limit") Integer limit){
-    return new BooksPageDto(bookService.getPageOfBooksByAuthorId(authorId, offset, limit).getContent());
+      @RequestParam("limit") Integer limit) {
+    return new BooksPageDto(
+        bookService.getPageOfBooksByAuthorId(authorId, offset, limit).getContent());
   }
 
   @GetMapping("/authors")
-  public String authorsPage(){
+  public String authorsPage() {
     return "authors/index";
   }
 
   @ApiOperation("method to get map of authors")
   @GetMapping("/api/authors")
   @ResponseBody // аннотация возвращает ответ напрямую данными, а не через шаблон Thymeleaf
-  public Map<String, List<AuthorEntity>> authors(){
+  public Map<String, List<AuthorEntity>> authors() {
     return authorService.getAuthorsMap();
   }
 

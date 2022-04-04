@@ -15,7 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SpringfoxConfig {
 
   @Bean
-  public Docket docket(){
+  public Docket docket() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         //.apis(RequestHandlerSelectors.any()) //отображает подкапотные методы спринга в документации
@@ -28,7 +28,7 @@ public class SpringfoxConfig {
         ;
   }
 
-  public ApiInfo apiInfo(){
+  public ApiInfo apiInfo() {
     return new ApiInfo("Bookshop API",
         "API for bookshop",
         "1.0",
@@ -37,7 +37,7 @@ public class SpringfoxConfig {
         "api_license",
         "http://www.lecense.edu.org",
         new ArrayList<>()
-        );
+    );
   }
 
 }

@@ -13,15 +13,15 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 public class LocaleChangeConfig implements WebMvcConfigurer {
 
   @Bean
-  public LocaleResolver localeResolver(){
+  public LocaleResolver localeResolver() {
     SessionLocaleResolver localeResolver = new SessionLocaleResolver();
     localeResolver.setDefaultLocale(Locale.ENGLISH);
     return localeResolver;
   }
 
-//  перехватчик событий, отлавливает событие при переключении языка в интерфейс
+  //  перехватчик событий, отлавливает событие при переключении языка в интерфейс
   @Bean
-  public LocaleChangeInterceptor localeChangeInterceptor(){
+  public LocaleChangeInterceptor localeChangeInterceptor() {
     LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
     localeChangeInterceptor.setParamName("lang");
     return localeChangeInterceptor;

@@ -64,20 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and().oauth2Login()
         .and().oauth2Client();
 
-    //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-
-//    JWT token authentication
-//            .csrf().disable()
-//        .authorizeRequests()
-//        .antMatchers("/my","/profile").hasRole("USER")
-//        .antMatchers("/**").permitAll()
-//        .and().formLogin()
-//        .loginPage("/signin").failureUrl("/signin")
-//        .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token");
-//
-//    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//    http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
   }
 }

@@ -16,18 +16,14 @@ public class BooksRecentController {
     this.bookService = bookService;
   }
 
-//  @ModelAttribute("booksList")
-//  public List<Book> bookList(){
-//    return bookService.getBooksData();
-//  }
 
   @ModelAttribute("newBooks")
-  public List<BookEntity> newBooks(){
+  public List<BookEntity> newBooks() {
     return bookService.getPageOfNewBooks(0, 20).getContent();
   }
 
   @GetMapping("/books/recent_page")
-  public String booksRecentPage(){
+  public String booksRecentPage() {
     return "books/recent_page";
   }
 

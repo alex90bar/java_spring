@@ -17,7 +17,7 @@ public class EmailConfig {
   private String password;
 
   @Bean
-  public JavaMailSender getJavaMailSender(){
+  public JavaMailSender getJavaMailSender() {
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     mailSender.setHost("smtp.gmail.com");
     mailSender.setPort(465);
@@ -32,12 +32,10 @@ public class EmailConfig {
     props.put("mail.smtp.ssl.enable", "true");
     props.put("mail.debug", "true");
 
-
     props.put("mail.protocol", "smtp");
     props.put("mail.smtp.ssl.protocols", "TLSv1.2");
     props.put("mail.default-encoding", "UTF-8");
-    props.put("mail.smtp.port",  "465");
-
+    props.put("mail.smtp.port", "465");
 
     mailSender.setJavaMailProperties(props);
     return mailSender;

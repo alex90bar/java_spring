@@ -21,15 +21,12 @@ public class BooksPopularController {
   }
 
   @ModelAttribute("booksList")
-  public List<BookEntity> bookList(){
-    return booksRatingAndPopulatityService.getPageOfPopularBooks(0,5).getContent();
+  public List<BookEntity> bookList() {
+    return booksRatingAndPopulatityService.getPageOfPopularBooks(0, 5).getContent();
   }
-//  public List<BookEntity> bookList(){
-//    return bookService.getBooksData();
-//  }
 
   @GetMapping("/books/popular_page")
-  public String booksPopularPage(){
+  public String booksPopularPage() {
     return "books/popular_page";
   }
 

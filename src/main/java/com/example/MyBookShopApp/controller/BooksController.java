@@ -48,12 +48,12 @@ public class BooksController {
     this.reviewRepository = reviewRepository;
   }
 
-  public boolean isUserAuthenticated(){
-    if ( SecurityContextHolder.getContext().getAuthentication() != null &&
+  public boolean isUserAuthenticated() {
+    if (SecurityContextHolder.getContext().getAuthentication() != null &&
         SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
         //when Anonymous Authentication is enabled
         !(SecurityContextHolder.getContext().getAuthentication()
-            instanceof AnonymousAuthenticationToken) ){
+            instanceof AnonymousAuthenticationToken)) {
 
       return true;
     } else {
@@ -62,11 +62,11 @@ public class BooksController {
   }
 
 
-  public int countRating(RatingEntity ratingEntity){
+  public int countRating(RatingEntity ratingEntity) {
     int ratingTotal = ((ratingEntity.getOneStar()) + (ratingEntity.getTwoStar() * 2) +
         (ratingEntity.getThreeStar() * 3) + (ratingEntity.getFourStar() * 4) +
         (ratingEntity.getFiveStar() * 5));
-    double ratingCount =  (ratingEntity.getOneStar() + ratingEntity.getTwoStar() +
+    double ratingCount = (ratingEntity.getOneStar() + ratingEntity.getTwoStar() +
         ratingEntity.getThreeStar() + ratingEntity.getFourStar() + ratingEntity.getFiveStar());
 
     return (int) Math.round(ratingTotal / ratingCount);
@@ -74,38 +74,49 @@ public class BooksController {
   }
 
   @GetMapping("/{slug}")
-  public String bookPage(@PathVariable("slug") String slug, Model model){
+  public String bookPage(@PathVariable("slug") String slug, Model model) {
     BookEntity book = bookRepository.findBookEntityBySlug(slug);
     model.addAttribute("slugBook", book);
 
     RatingEntity ratingEntity = ratingRepository.findRatingEntityByBookId(book.getId());
-    if (ratingEntity != null){
+    if (ratingEntity != null) {
       int rating = countRating(ratingEntity);
 
-
       ArrayList<String> starModel = new ArrayList<>();
-      switch (rating){
-        case 0: starModel.addAll(Arrays.asList("Rating-star", "Rating-star",
-            "Rating-star", "Rating-star", "Rating-star"));
-        break;
-        case 1: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star",
-            "Rating-star", "Rating-star", "Rating-star"));
+      switch (rating) {
+        case 0:
+          starModel.addAll(Arrays.asList("Rating-star", "Rating-star",
+              "Rating-star", "Rating-star", "Rating-star"));
           break;
-        case 2: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
-            "Rating-star", "Rating-star", "Rating-star"));
+        case 1:
+          starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star",
+              "Rating-star", "Rating-star", "Rating-star"));
           break;
-        case 3: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
-            "Rating-star Rating-star_view", "Rating-star", "Rating-star"));
+        case 2:
+          starModel
+              .addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+                  "Rating-star", "Rating-star", "Rating-star"));
           break;
-        case 4: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
-            "Rating-star Rating-star_view", "Rating-star Rating-star_view", "Rating-star"));
+        case 3:
+          starModel
+              .addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+                  "Rating-star Rating-star_view", "Rating-star", "Rating-star"));
           break;
-        case 5: starModel.addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
-            "Rating-star Rating-star_view", "Rating-star Rating-star_view", "Rating-star Rating-star_view"));
+        case 4:
+          starModel
+              .addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+                  "Rating-star Rating-star_view", "Rating-star Rating-star_view", "Rating-star"));
+          break;
+        case 5:
+          starModel
+              .addAll(Arrays.asList("Rating-star Rating-star_view", "Rating-star Rating-star_view",
+                  "Rating-star Rating-star_view", "Rating-star Rating-star_view",
+                  "Rating-star Rating-star_view"));
           break;
       }
-      int ratingVotes = ratingEntity.getOneStar() + ratingEntity.getTwoStar() + ratingEntity.getThreeStar() +
-          ratingEntity.getFourStar() + ratingEntity.getFiveStar();
+      int ratingVotes =
+          ratingEntity.getOneStar() + ratingEntity.getTwoStar() + ratingEntity.getThreeStar() +
+              ratingEntity.getFourStar() + ratingEntity.getFiveStar();
 
       model.addAttribute("starModel", starModel);
       model.addAttribute("rating", rating);
@@ -117,7 +128,7 @@ public class BooksController {
           "Rating-star", "Rating-star", "Rating-star"));
       int rating = 0;
       int ratingVotes = 0;
-      ratingEntity = new RatingEntity(0,0,0,0,0);
+      ratingEntity = new RatingEntity(0, 0, 0, 0, 0);
 
       model.addAttribute("starModel", starModel);
       model.addAttribute("rating", rating);
@@ -128,19 +139,19 @@ public class BooksController {
     List<ReviewEntity> reviewEntityList = reviewRepository.findReviewEntitiesByBookId(book.getId());
     model.addAttribute("reviewEntityList", reviewEntityList);
 
-
-    if (isUserAuthenticated()){
+    if (isUserAuthenticated()) {
       model.addAttribute("unauthorizedUser", false);
     } else {
       model.addAttribute("unauthorizedUser", true);
     }
 
-      return "books/slug";
+    return "books/slug";
 
   }
 
   @PostMapping("/{slug}/img/save")
-  public String saveNewBookImage(@RequestParam("file") MultipartFile file, @PathVariable("slug") String slug)
+  public String saveNewBookImage(@RequestParam("file") MultipartFile file,
+      @PathVariable("slug") String slug)
       throws IOException {
     String savePath = storage.saveNewBookImage(file, slug);
     BookEntity bookToUpdate = bookRepository.findBookEntityBySlug(slug);
@@ -164,12 +175,12 @@ public class BooksController {
     Logger.getLogger(this.getClass().getSimpleName()).info("book file data lentgh: " + data.length);
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
+        .header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment;filename=" + path.getFileName().toString())
         .contentType(mediaType)
         .contentLength(data.length)
         .body(new ByteArrayResource(data));
   }
-
 
 
 }

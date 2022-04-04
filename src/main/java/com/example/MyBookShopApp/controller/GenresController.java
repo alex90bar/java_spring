@@ -58,34 +58,34 @@ public class GenresController {
 
   @ModelAttribute("genresList")
   public List<GenreObject> getGenreList() {
-  List<GenreEntity> genreEntities = genreService.getGenres();
-  List<GenreObject> parents = new ArrayList<>();
+    List<GenreEntity> genreEntities = genreService.getGenres();
+    List<GenreObject> parents = new ArrayList<>();
 
-  for (int i = 0; i < genreEntities.size(); i++){
-    GenreEntity genreEntity = genreEntities.get(i);
-    if (genreEntity.getParentId() == 0) {
-      GenreObject genre = new GenreObject(genreEntity.getName(), genreEntity.getId());
-      genre.setCount(genreEntity.getBookList().size());
-      parents.add(genre);
-      genreEntities.remove(i);
-      i--;
+    for (int i = 0; i < genreEntities.size(); i++) {
+      GenreEntity genreEntity = genreEntities.get(i);
+      if (genreEntity.getParentId() == 0) {
+        GenreObject genre = new GenreObject(genreEntity.getName(), genreEntity.getId());
+        genre.setCount(genreEntity.getBookList().size());
+        parents.add(genre);
+        genreEntities.remove(i);
+        i--;
       }
     }
 
-  findChildren(parents, genreEntities);
+    findChildren(parents, genreEntities);
 
     return parents;
   }
 
-  @GetMapping(value = { "/genres/{genreName}"})
+  @GetMapping(value = {"/genres/{genreName}"})
   public String getBooksByTag(@PathVariable(value = "genreName", required = false)
-      GenreNameDto genreNameDto, Model model){
+      GenreNameDto genreNameDto, Model model) {
     model.addAttribute("genreNameDto", genreNameDto);
     Integer genreId = Integer.parseInt(genreNameDto.getExample());
     String genreTitle = genreService.getGenreById(genreId).getName();
     model.addAttribute("genreTitle", genreTitle);
     model.addAttribute("booksList",
-        bookService.getPageOfBooksByGenreId(genreId, 0,5).getContent());
+        bookService.getPageOfBooksByGenreId(genreId, 0, 5).getContent());
     return "genres/slug";
   }
 
@@ -93,16 +93,16 @@ public class GenresController {
   @ResponseBody
   public BooksPageDto getNextGenrePage(@RequestParam("offset") Integer offset,
       @RequestParam("limit") Integer limit,
-      @PathVariable(value = "genreName", required = false) GenreNameDto genreNameDto){
+      @PathVariable(value = "genreName", required = false) GenreNameDto genreNameDto) {
     return new BooksPageDto(bookService
-        .getPageOfBooksByGenreId(Integer.parseInt(genreNameDto.getExample()),offset,limit).getContent());
+        .getPageOfBooksByGenreId(Integer.parseInt(genreNameDto.getExample()), offset, limit)
+        .getContent());
   }
 
   @GetMapping("/genres")
-  public String genresPage(){
+  public String genresPage() {
     return "genres/index";
   }
-
 
 
 }

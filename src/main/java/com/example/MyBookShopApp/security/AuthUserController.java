@@ -85,16 +85,6 @@ public class AuthUserController {
     }
     return response;
 
-//    else {
-//      if (payload.getContact().contains("@")){
-//        response.setResult("true");
-//        return response;
-//      } else {
-//        return new ContactConfirmationResponse();
-//      }
-//    }
-//    response.setResult("true");
-//    return response;
   }
 
   @PostMapping("/reg")
@@ -146,17 +136,4 @@ public class AuthUserController {
     return "profile";
   }
 
-
-//  @GetMapping("/logout")
-//  public String handleLogout(HttpServletRequest request){
-//    HttpSession session = request.getSession();
-//    SecurityContextHolder.clearContext();
-//    if (session != null){
-//      session.invalidate();
-//    }
-//    for (Cookie cookie : request.getCookies()){
-//      cookie.setMaxAge(0);
-//    }
-//    return "redirect:/";
-//  }
 }

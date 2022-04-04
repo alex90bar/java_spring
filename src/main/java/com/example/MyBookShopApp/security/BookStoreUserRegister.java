@@ -38,7 +38,6 @@ public class BookStoreUserRegister {
     BookstoreUser userByPhone = bookstoreUserRepository.findBookstoreUserByPhone(
         registrationForm.getPhone());
 
-//    if(bookstoreUserRepository.findBookstoreUserByEmail(registrationForm.getEmail()) == null){
     if(userByEmail == null && userByPhone == null){
       BookstoreUser user = new BookstoreUser();
       user.setName(registrationForm.getName());

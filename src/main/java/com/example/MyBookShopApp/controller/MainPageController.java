@@ -143,42 +143,11 @@ public class MainPageController {
       @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto){
     return new BooksPageDto(bookService
         .getPageOfGoogleBooksApiSearchResult(searchWordDto.getExample(),offset,limit));
-//    return new BooksPageDto(bookService
-//        .getPageOfSearchResultBooks(searchWordDto.getExample(),offset,limit).getContent());
   }
 
   @GetMapping("/")
   public String mainPage(){
     return "index";
   }
-//
-//  @GetMapping("/genres")
-//  public String genresPage(){
-//    return "genres/index";
-//  }
-//
-//  @GetMapping("/authors")
-//  public String authorsPage(Model model){
-//    TreeMap<String, ArrayList<Author>> authorsSorted = new TreeMap<>();
-//
-//    List<Author> authorsList = authorService.getAuthorsData();
-//
-//    for (Author author : authorsList){
-//      String letter = String.valueOf(author.getAuthorName().charAt(0));
-//      if (authorsSorted.containsKey(letter)){
-//        ArrayList<Author> temporaryList = authorsSorted.get(letter);
-//        temporaryList.add(author);
-//        temporaryList.sort(Comparator.comparing(Author::getAuthorName));
-//        authorsSorted.put(letter, temporaryList);
-//      } else {
-//        ArrayList<Author> temporaryList = new ArrayList<>();
-//        temporaryList.add(author);
-//        authorsSorted.put(letter, temporaryList);
-//      }
-//    }
-//
-//    model.addAttribute("authorData", authorsSorted);
-//    return "authors/index";
-//  }
 
 }

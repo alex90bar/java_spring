@@ -32,7 +32,7 @@ public class BooksRestApiController {
 
   @GetMapping("/books/by-author")
   @ApiOperation("get book list of bookshop by passed author name")
-  public ResponseEntity<List<BookEntity>> booksByAuthor(@RequestParam("author") String authorName){
+  public ResponseEntity<List<BookEntity>> booksByAuthor(@RequestParam("author") String authorName) {
     return ResponseEntity.ok(bookService.getBooksByAuthor(authorName));
   }
 
@@ -53,32 +53,34 @@ public class BooksRestApiController {
   @GetMapping("/books/by-price-range")
   @ApiOperation("get books by price range from minimum to maximum")
   public ResponseEntity<List<BookEntity>> priceRangeBooks(@RequestParam("min") Integer min,
-      @RequestParam("max") Integer max){
+      @RequestParam("max") Integer max) {
     return ResponseEntity.ok(bookService.getBooksWithPriceBetween(min, max));
   }
 
   @GetMapping("/books/with-max-discount")
   @ApiOperation("get list of books with max discount")
-  public ResponseEntity<List<BookEntity>> maxDiscountBooks(){
+  public ResponseEntity<List<BookEntity>> maxDiscountBooks() {
     return ResponseEntity.ok(bookService.getBooksWithMaxDiscount());
   }
 
   @GetMapping("/books/bestsellers")
   @ApiOperation("get bestseller books (which is_bestseller = 1)")
-  public ResponseEntity<List<BookEntity>> bestsellerBooks(){
+  public ResponseEntity<List<BookEntity>> bestsellerBooks() {
     return ResponseEntity.ok(bookService.getBestsellers());
   }
 
   @ExceptionHandler(MissingServletRequestParameterException.class)
-  public ResponseEntity<ApiResponse<BookEntity>> handleMissingServletRequestParameterException(Exception exception){
+  public ResponseEntity<ApiResponse<BookEntity>> handleMissingServletRequestParameterException(
+      Exception exception) {
     return new ResponseEntity<>(new ApiResponse<BookEntity>(HttpStatus.BAD_REQUEST,
         "Missing required parameters", exception), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(BookstoreApiWrongParameterException.class)
-  public ResponseEntity<ApiResponse<BookEntity>> handleBookstoreApiWrongParameterException(Exception exception){
+  public ResponseEntity<ApiResponse<BookEntity>> handleBookstoreApiWrongParameterException(
+      Exception exception) {
     return new ResponseEntity<>(new ApiResponse<BookEntity>(HttpStatus.BAD_REQUEST,
         "Bad parameter value...", exception), HttpStatus.BAD_REQUEST);
   }
 
-  }
+}

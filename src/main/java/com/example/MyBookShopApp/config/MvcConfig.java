@@ -25,7 +25,7 @@ public class MvcConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public RestTemplate getRestTemplate(){
+  public RestTemplate getRestTemplate() {
     return new RestTemplate();
   }
 }

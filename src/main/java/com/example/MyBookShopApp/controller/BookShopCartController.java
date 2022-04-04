@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class BookShopCartController {
 
   @ModelAttribute(name = "bookCart")
-  public List<BookEntity> bookCart(){
+  public List<BookEntity> bookCart() {
     return new ArrayList<>();
   }
 
@@ -41,14 +41,17 @@ public class BookShopCartController {
   }
 
   @GetMapping("/cart")
-  public String handleCartRequest(@CookieValue(value = "cartContents", required = false) String cartContents,
-      Model model){
-    if (cartContents == null || cartContents.equals("")){
+  public String handleCartRequest(
+      @CookieValue(value = "cartContents", required = false) String cartContents,
+      Model model) {
+    if (cartContents == null || cartContents.equals("")) {
       model.addAttribute("isCartEmpty", true);
     } else {
       model.addAttribute("isCartEmpty", false);
       cartContents = cartContents.startsWith("/") ? cartContents.substring(1) : cartContents;
-      cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() -1) : cartContents;
+      cartContents =
+          cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() - 1)
+              : cartContents;
       String[] cookieSlugs = cartContents.split("/");
       List<BookEntity> booksFromCookieSlugs = bookRepository.findBookEntitiesBySlugIn(cookieSlugs);
       model.addAttribute("bookCart", booksFromCookieSlugs);
@@ -60,9 +63,9 @@ public class BookShopCartController {
 
   @PostMapping("/changeBookStatus/cart/remove/{slug}")
   public String handleRemoveBookFromCartRequest(@PathVariable("slug") String slug,
-  @CookieValue(name = "cartContents", required = false) String cartContents,
-  HttpServletResponse response, Model model){
-    if (cartContents != null && !cartContents.equals("")){
+      @CookieValue(name = "cartContents", required = false) String cartContents,
+      HttpServletResponse response, Model model) {
+    if (cartContents != null && !cartContents.equals("")) {
       ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartContents.split("/")));
       cookieBooks.remove(slug);
       Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
@@ -78,14 +81,14 @@ public class BookShopCartController {
   @PostMapping("/changeBookStatus/{slug}")
   public String handleChangeBookStatus(@PathVariable("slug") String slug,
       @CookieValue(name = "cartContents", required = false) String cartContents,
-      HttpServletResponse response, Model model){
+      HttpServletResponse response, Model model) {
 
-    if (cartContents == null || cartContents.equals("")){
+    if (cartContents == null || cartContents.equals("")) {
       Cookie cookie = new Cookie("cartContents", slug);
       cookie.setPath("/books");
       response.addCookie(cookie);
       model.addAttribute("isCartEmpty", false);
-    } else if (!cartContents.contains(slug)){
+    } else if (!cartContents.contains(slug)) {
       StringJoiner stringJoiner = new StringJoiner("/");
       stringJoiner.add(cartContents).add(slug);
       Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
@@ -97,19 +100,19 @@ public class BookShopCartController {
   }
 
   @GetMapping("/pay")
-  public RedirectView handlePay(@CookieValue(value = "cartContents", required = false) String cartContents)
+  public RedirectView handlePay(
+      @CookieValue(value = "cartContents", required = false) String cartContents)
       throws NoSuchAlgorithmException {
     cartContents = cartContents.startsWith("/") ? cartContents.substring(1) : cartContents;
-    cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() -1) : cartContents;
+    cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() - 1)
+        : cartContents;
     String[] cookieSlugs = cartContents.split("/");
     List<BookEntity> booksFromCookieSlugs = bookRepository.findBookEntitiesBySlugIn(cookieSlugs);
     String paymentUrl = paymentService.getPaymentUrl(booksFromCookieSlugs);
     return new RedirectView(paymentUrl);
   }
 
-
-
-  }
+}
 
 
 
