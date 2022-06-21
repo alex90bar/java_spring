@@ -19,8 +19,8 @@ public class SpringfoxConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
         //.apis(RequestHandlerSelectors.any()) //отображает подкапотные методы спринга в документации
-        //.apis(RequestHandlerSelectors.basePackage("com.example.MyBookShopApp.controller"))  //отображает по выбранному пути
-        .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))  //отображает по аннотации
+        .apis(RequestHandlerSelectors.basePackage("com.example.MyBookShopApp.controller"))  //отображает по выбранному пути
+        //.apis(RequestHandlerSelectors.withClassAnnotation(Api.class))  //отображает по аннотации
         .paths(PathSelectors.any())  //отображает все методы
         //.paths(PathSelectors.ant("/api/*")) // в документацию попадают методы, в эндпоинте которых есть приставка api
         .build()
