@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +24,19 @@ public class PostponedController {
 
   private final BookRepository bookRepository;
 
+  @ModelAttribute(name = "booksPostponed")
+  public List<BookEntity> booksPostponed() {
+    return new ArrayList<>();
+  }
+
   @Autowired
   public PostponedController(BookRepository bookRepository) {
     this.bookRepository = bookRepository;
   }
 
   @GetMapping("/postponed")
-  public String handleCartRequest(@CookieValue(value = "postponeContents", required = false)
-      String postponeContents,
+  public String handleCartRequest(
+      @CookieValue(value = "postponeContents", required = false) String postponeContents,
       Model model) {
     if (postponeContents == null || postponeContents.equals("")) {
       model.addAttribute("isPostponeEmpty", true);
